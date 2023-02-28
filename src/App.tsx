@@ -3,7 +3,9 @@ import { BrowserRouter, Route, Routes } from "react-router-dom"
 import GlobalStyle from "./components/global"
 import MyContext from "./context/context"
 import AdminScreen from "./pages/Admin/AdminScreen"
+import AppDesktop from "./pages/AppDesktop/AppDesktop"
 import Home from "./pages/Home/Home"
+import HomeApp from "./pages/HomeApp/HomeApp"
 import ScreenType1 from "./pages/ScreenType1/ScreenType1"
 import UserScreen from "./pages/User/UserScreen"
 import { UserData } from "./types/types"
@@ -17,6 +19,7 @@ function App() {
     id: 0
   })
   const config = { headers: { Authorization: `Bearer ${userData?.token}` } }
+  console.log(config)
 
   return (
     <BrowserRouter>
@@ -27,8 +30,11 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/admin" element={<AdminScreen />} />
           <Route path="/user" element={<UserScreen />} />
-          <Route path="/tela" element={<ScreenType1 />} />
-        </Routes> 
+          <Route path="/tela/:id" element={<ScreenType1 />} />
+
+          <Route path="/home" element={<HomeApp />} />
+          <Route path="/appdesktop" element={<AppDesktop />} />
+        </Routes>
 
       </MyContext.Provider>
 

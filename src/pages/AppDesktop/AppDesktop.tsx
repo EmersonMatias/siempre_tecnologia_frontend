@@ -1,0 +1,18 @@
+import styled from "styled-components"
+import RegisterProducts from "../User/RegisterProducts"
+
+export default function AppDesktop() {
+    return (
+        <Container>
+            <RegisterProducts />
+        </Container>
+    )
+}
+
+
+const Container = styled.div`
+    width: 100%;
+    height: 100vh;
+    background-color: aliceblue;
+
+`

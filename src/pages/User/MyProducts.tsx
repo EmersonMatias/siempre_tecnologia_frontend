@@ -4,13 +4,17 @@ import styled from "styled-components"
 import MyContext from "../../context/context"
 import { ProductType } from "./UserScreen"
 
-export default function MyProducts() {
+type UserScreenProps = {
+    updatePage: boolean,
+    setUpdatePage: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export default function MyProducts({ updatePage, setUpdatePage }: UserScreenProps) {
     const { config } = useContext(MyContext)
     const list: any = localStorage.getItem("list")
     const [myProducts, setMyProducts] = useState<ProductType[]>([])
     const productsSelected: ProductType[] = JSON.parse(list)
     const productsCode = productsSelected?.map((e: ProductType) => (e.code))
-    const [upadte, setUpdate] = useState(false)
 
     useEffect(() => {
         const getProducts = async () => {
@@ -22,7 +26,7 @@ export default function MyProducts() {
             }
         }
         getProducts()
-    }, [upadte])
+    }, [updatePage])
 
     function showPr(item: ProductType) {
         const products: ProductType[] = JSON.parse(list)
@@ -40,7 +44,7 @@ export default function MyProducts() {
             products.splice(indexProduct, 1)
             console.log(products)
             localStorage.setItem("list", JSON.stringify(products))
-            return setUpdate(!upadte)
+            return setUpdatePage(!updatePage)
         }
 
         if (products === null) {
@@ -55,7 +59,7 @@ export default function MyProducts() {
             localStorage.setItem("list", JSON.stringify(newProducts))
         }
 
-        setUpdate(!upadte)
+        setUpdatePage(!updatePage)
     }
 
     return (

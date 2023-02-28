@@ -1,19 +1,28 @@
 import axios from "axios"
-import { useContext, useState } from "react"
+import { useState } from "react"
 import styled from "styled-components"
-import MyContext from "../../context/context"
 import { ProductType } from "./UserScreen"
 
 export type TypeFile = "mgv" | "filzola"
 
-export default function RegisterProducts(){
+
+export default function RegisterProducts() {
+    const [filePath, setFilePath] = useState(localStorage.getItem("path"));
     const [typeFile, setTypeFile] = useState<TypeFile>("mgv")
     const [fileContent, setFileContent] = useState("")
     const productsList: ProductType[] = []
-    const {userData, config } = useContext(MyContext)
+    const [disabled, setDisabled] = useState(false)
+    const token = localStorage.getItem("token")
+    const id = localStorage.getItem("id")
+    const config = { headers: { Authorization: `Bearer ${token}` } }
+    console.log(filePath)
+    console.log(config)
 
     function handleArquivoSelecionado(event: any) {
         const arquivoSelecionado = event.target.files[0];
+        const arquivoSelecionadoPath:string = event.target.files[0].path
+        localStorage.setItem("path", arquivoSelecionadoPath)
+        setFilePath(arquivoSelecionadoPath)
         const reader = new FileReader();
 
         reader.onload = (evento: any) => {
@@ -24,12 +33,16 @@ export default function RegisterProducts(){
         reader.readAsText(arquivoSelecionado);
     }
 
-    async function sendProducts() {
-        try {
+    async function sendProducts(event: React.FormEvent<HTMLFormElement>) {
+        event.preventDefault()
 
+        try {
+            setDisabled(true)
             const sucess = await axios.post("http://localhost:4000/products", productsList, config)
+            setDisabled(false)
             console.log(sucess)
         } catch (error) {
+            setDisabled(false)
             console.log(error)
         }
     }
@@ -41,7 +54,7 @@ export default function RegisterProducts(){
             for (let i = 0; i < fileContent.length / 41; i++) {
 
                 const repartindo = fileContent.slice(init, end).replace("\r\n", "")
-                productsList.push({ code: Number(repartindo.slice(0, 6)), type: repartindo[6], product: repartindo.slice(7, 29), price: Number(repartindo.slice(29, 36)), user_id: Number(userData.id) })
+                productsList.push({ code: Number(repartindo.slice(0, 6)), type: repartindo[6], product: repartindo.slice(7, 29), price: Number(repartindo.slice(29, 36)), user_id: Number(id) })
                 init = end
                 end = end + 41
             }
@@ -51,7 +64,7 @@ export default function RegisterProducts(){
             for (let i = 0; i < fileContent.length / 148; i++) {
 
                 const repartindo = fileContent.slice(init, end).replace("\r\n", "")
-                productsList.push({ code: Number(repartindo.slice(3, 9)), type: repartindo[2], product: repartindo.slice(18, 43), price: Number(repartindo.slice(9, 15)), user_id: Number(userData.id) })
+                productsList.push({ code: Number(repartindo.slice(3, 9)), type: repartindo[2], product: repartindo.slice(18, 43), price: Number(repartindo.slice(9, 15)), user_id: Number(id) })
                 init = end
                 end = end + 148
             }
@@ -59,38 +72,43 @@ export default function RegisterProducts(){
     }
     chooseTypeFile()
 
-    return(
+    return (
         <Container typeFile={typeFile}>
             <div className="configProductsContainer">
-                    <div className="typeFileContainer">
-                        <button className="mgv" onClick={() => typeFile !== "mgv" ? setTypeFile("mgv") : ""}>Itens MGV</button>
-                        <button className="filzola" onClick={() => typeFile !== "filzola" ? setTypeFile("filzola") : ""}>FIlzola</button>
-                    </div>
-                    <input type="file" accept="text/plain" onChange={(event) => handleArquivoSelecionado(event)} disabled={productsList.length ? true : false} />
-                    <div className="contentContainer">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Código</th>
-                                    <th>Produto</th>
-                                    <th>Und</th>
-                                    <th>Preço</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {productsList.map((product, index) => (
-                                    <tr key={index}>
-                                        <td>{product.code}</td>
-                                        <td>{product.product}</td>
-                                        <td>{product.type}</td>
-                                        <td>R$ {(Number(product.price) / 100).toFixed(2).replace(".", ",")}</td>
-                                    </tr>))}
-                            </tbody>
-
-                        </table>
-                    </div>
-                    <button onClick={() => sendProducts()} className="sendProduct">Enviar Produtos</button>
+                <div className="typeFileContainer">
+                    <button className="mgv" onClick={() => typeFile !== "mgv" ? setTypeFile("mgv") : ""}>Itens MGV</button>
+                    <button className="filzola" onClick={() => typeFile !== "filzola" ? setTypeFile("filzola") : ""}>FIlzola</button>
+                    <form onSubmit={sendProducts}>
+                        <input type="file" accept="text/plain" onChange={(event) => handleArquivoSelecionado(event)} disabled={productsList.length ? true : false} />
+                        <button className="sendProduct" disabled={disabled}>Enviar Produtos</button>
+                    </form>
+                    <div>Arquivo observado: {filePath}</div>
                 </div>
+
+                <div className="contentContainer">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Produto</th>
+                                <th>Und</th>
+                                <th>Preço</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {productsList.map((product, index) => (
+                                <tr key={index}>
+                                    <td>{product.code}</td>
+                                    <td>{product.product}</td>
+                                    <td>{product.type}</td>
+                                    <td>R$ {(Number(product.price) / 100).toFixed(2).replace(".", ",")}</td>
+                                </tr>))}
+                        </tbody>
+
+                    </table>
+                </div>
+
+            </div>
         </Container>
     )
 }
@@ -104,11 +122,23 @@ const Container = styled.div<PropsTypeFile>`
     padding: 2rem;
     width: 100%;
     margin-bottom: 5rem;
+    display: flex;
+
 
     input{
         width: 100%;
         font-size: 1.4rem;
         margin: 1rem 0;
+    }
+    .typeFileContainer{
+        width: 50%;
+        margin-bottom: 2rem;
+    }
+
+    .contentContainer{
+        width: 50%;
+        height: 400px;
+        overflow-y: scroll;
     }
 
     .filzola, .mgv{
@@ -130,11 +160,7 @@ const Container = styled.div<PropsTypeFile>`
         background-color: ${props => props.typeFile === "mgv" ? "#23cc23" : "#c0bcbf"};
     }
 
-    .contentContainer{
-        width: 50%;
-        height: 400px;
-        overflow-y: scroll;
-    }
+   
 
     .contentContainer::-webkit-scrollbar {
         width: 10px;     
@@ -162,6 +188,10 @@ const Container = styled.div<PropsTypeFile>`
         border: none;
         color: #ffffff;
         margin-top: 2rem;
+
+        &:disabled{
+            background-color: #f0d1d1;
+        }
     }
 
 `

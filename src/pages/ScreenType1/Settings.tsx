@@ -1,34 +1,52 @@
 import { useState } from "react";
 import styled from "styled-components"
 import Close from "../../img/iconClose.svg"
+import UploadFiles from "../User/UploadFiles";
 
 
 type PropsProductsTable = {
     settings: {
-        showCounter: boolean,
-        showProductsTable: boolean,
-        showBanner: boolean,
         settingVisible: boolean
-        tableLines: number,
-        spaceLines: number,
-        fontSize: number
     }
     setSettings: React.Dispatch<React.SetStateAction<{
-        showCounter: boolean;
-        showProductsTable: boolean;
-        showBanner: boolean;
         settingVisible: boolean;
-        tableLines: number;
-        spaceLines: number;
-        fontSize: number;
+    }>>
+    screen: {
+        background_url: string,
+        font_family: string,
+        font_size: number,
+        id: number,
+        screen_name: string,
+        show_banner: boolean,
+        show_counter: boolean,
+        show_productstable: boolean,
+        space_lines: number,
+        table_lines: number,
+        user_id: number,
+        color_lines: string,
+        width_table: number
+    }
+    setScreen: React.Dispatch<React.SetStateAction<{
+        background_url: string,
+        font_family: string,
+        font_size: number,
+        id: number,
+        screen_name: string,
+        show_banner: boolean,
+        show_counter: boolean,
+        show_productstable: boolean,
+        space_lines: number,
+        table_lines: number,
+        user_id: number,
+        color_lines: string,
+        width_table: number
     }>>
 }
 
-export default function Settings({ settings, setSettings }: PropsProductsTable) {
+export default function Settings({ settings, setSettings, screen, setScreen }: PropsProductsTable) {
     const [a, setA] = useState({ x: 0, y: 0 })
 
-    console.log(settings.tableLines)
-
+    console.log(screen.id, "qaaaa")
     function handleDragEnd(event: any) {
         const element = event.target;
         const container = element.parentElement;
@@ -40,27 +58,40 @@ export default function Settings({ settings, setSettings }: PropsProductsTable) 
     }
 
     return (
-        <Container draggable="true" onDragEnd={(event) => handleDragEnd(event)} top={a.y} left={a.x} settings={settings} >
+        <Container draggable="true" onDragEnd={(event) => handleDragEnd(event)} top={a.y} left={a.x} settings={settings} screen={screen}>
             <h1>Configurações</h1>
             <div className="close" onClick={() => setSettings({ ...settings, settingVisible: false })}>
                 <img src={Close} />
             </div>
             <div className="configLayoutContainer">
-                <div>Exibir Contador <button className="counter" onClick={() => setSettings({ ...settings, showCounter: !settings.showCounter })}>
-                    {settings.showCounter === true ? "Ativado" : "Desativado"}
+                <div>Exibir Contador <button className="counter" onClick={() => setScreen({ ...screen, show_counter: !screen.show_counter })}>
+                    {screen.show_counter === true ? "Ativado" : "Desativado"}
                 </button></div>
-                <div>Exibir Tabela de Produtos <button className="productsTable" onClick={() => setSettings({ ...settings, showProductsTable: !settings.showProductsTable })}>
-                    {settings.showProductsTable === true ? "Ativado" : "Desativado"}
+                <div>Exibir Tabela de Produtos <button className="productsTable" onClick={() => setScreen({ ...screen, show_productstable: !screen.show_productstable })}>
+                    {screen.show_productstable === true ? "Ativado" : "Desativado"}
                 </button></div>
-                <div>Exibir Banner <button className="banner" onClick={() => setSettings({ ...settings, showBanner: !settings.showBanner })}>
-                    {settings.showBanner === true ? "Ativado" : "Desativado"}
+                <div>Exibir Banner <button className="banner" onClick={() => setScreen({ ...screen, show_banner: !screen.show_banner })}>
+                    {screen.show_banner === true ? "Ativado" : "Desativado"}
                 </button></div>
             </div>
             <div className="configProductsTable">
-                <div className="numberLines">Número de linhas: <input type={"number"} onChange={(e) => setSettings({ ...settings, tableLines: Number(e.target.value) })} value={settings.tableLines} min={0} /></div>
-                <div className="spaceLines">Espaçamento entre Linhas: <input type={"number"} onChange={(e) => setSettings({ ...settings, spaceLines: Number(e.target.value) })} value={settings.spaceLines} min={0} /></div>
-                <div className="spaceLines">Tamanho da Fonte: <input type={"number"} onChange={(e) => setSettings({ ...settings, fontSize: Number(e.target.value) })} value={settings.fontSize} min={1} /></div>
+                <div className="numberLines">Número de linhas: <input type={"number"} onChange={(e) => setScreen({ ...screen, table_lines: Number(e.target.value) })} value={screen.table_lines} min={0} /></div>
+                <div className="spaceLines">Espaçamento entre Linhas: <input type={"number"} onChange={(e) => setScreen({ ...screen, space_lines: Number(e.target.value) })} value={screen.space_lines} min={0} /></div>
+                <div className="spaceLines">Tamanho da Fonte: <input type={"number"} onChange={(e) => setScreen({ ...screen, font_size: Number(e.target.value) })} value={screen.font_size} min={1} /></div>
+                <select onChange={(e) => setScreen({ ...screen, font_family: e.target.value })}>
+                    <option value="'Handlee', cursive">Handlee</option>
+                    <option value="'Open Sans', sans-serif">Open Sans</option>
+                    <option value="'Gloria Hallelujah', cursive">Gloria Hallelujah</option>
+                    <option value="'Roboto', sans-serif">Roboto</option>
+                </select>
+                <div className="color_lines">Cor das linhas: <input type={"color"} onChange={(e) => setScreen({ ...screen, color_lines: e.target.value })}></input>
+                    <input type={"button"} value="Sem cor" className="color_line_input" onClick={(e) => setScreen({ ...screen, color_lines: "" })}></input>
+                </div>
+                <div>Largura da Tabela de Produtos: <input type={"number"} min={50} max={100} value={screen.width_table} onChange={(e) => setScreen({ ...screen, width_table: Number(e.target.value) })}></input></div>
             </div>
+
+            <UploadFiles screen_id={screen.id}/>
+            <div className="save" onClick={() => { }}>salvar</div>
         </Container>
     )
 }
@@ -69,12 +100,21 @@ type Props = {
     top: number,
     left: number,
     settings: {
-        showCounter: boolean,
-        showProductsTable: boolean,
-        showBanner: boolean,
         settingVisible: boolean,
-        tableLines: number,
-        spaceLines: number
+    },
+    screen: {
+        background_url: string,
+        font_family: string,
+        font_size: number,
+        id: number,
+        screen_name: string,
+        show_banner: boolean,
+        show_counter: boolean,
+        show_productstable: boolean,
+        space_lines: number,
+        table_lines: number,
+        user_id: number,
+        color_lines: string
     }
 }
 
@@ -93,14 +133,19 @@ const Container = styled.div<Props>`
     align-items: center;
     font-size: 1.4rem;
     font-weight: bold;
+    overflow-y: scroll;
+
+    .color_line_input{
+        background-color: #FFFFFF;
+        margin-left: 1rem;
+        cursor: pointer;
+    }
 
     input{
         border-radius: 8px;
         font-size: 1rem;
         font-weight: bold;
-        width: 50px;
         padding-left: 10px;
-
     }
 
     .close{
@@ -140,15 +185,20 @@ const Container = styled.div<Props>`
     }
 
     .productsTable{
-        background-color: ${props => props.settings.showProductsTable === true ? "green" : "red"};
+        background-color: ${props => props.screen.show_productstable === true ? "green" : "red"};
     }
 
     .counter{
-        background-color: ${props => props.settings.showCounter === true ? "green" : "red"};
+        background-color: ${props => props.screen.show_counter === true ? "green" : "red"};
     }
 
     .banner{
-        background-color: ${props => props.settings.showBanner === true ? "green" : "red"};
+        background-color: ${props => props.screen.show_banner === true ? "green" : "red"};
+    }
+
+    .save{
+        position: absolute;
+        bottom: 2rem;
     }
 `
 

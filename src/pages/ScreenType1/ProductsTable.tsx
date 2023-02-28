@@ -3,28 +3,34 @@ import styled from "styled-components"
 import background from "../../img/background2.png"
 import { ProductType } from "../User/UserScreen"
 type PropsProductsTable = {
-    settings: {
-        showCounter: boolean,
-        showProductsTable: boolean,
-        showBanner: boolean,
-        settingVisible: boolean,
-        tableLines: number,
-        spaceLines: number,
-        fontSize: number
+    screen:{
+        background_url: string,
+        font_family: string,
+        font_size: number,
+        id: number,
+        screen_name: string,
+        show_banner: boolean,
+        show_counter: boolean,
+        show_productstable: boolean,
+        space_lines: number,
+        table_lines: number,
+        user_id: number,
+        color_lines: string,
+        width_table: number
     }
 }
 
 
 
-export default function ProductsTable({ settings }: PropsProductsTable) {
-    const quantityLines = settings.tableLines
+export default function ProductsTable({ screen }: PropsProductsTable) {
+    const quantityLines = screen.table_lines
     const [init, setInit] = useState(0)
     const [end, setEnd] = useState(quantityLines)
     const list: any = localStorage.getItem("list")
     const product:ProductType[] = JSON.parse(list)
-    console.log(product)
     const products = product?.slice(init, end)
 
+    console.log(screen.width_table)
     useEffect(() => {
         const interval = setInterval(() => {
             if (end >= product.length - 1) return setInit(0), setEnd(quantityLines)
@@ -40,7 +46,7 @@ export default function ProductsTable({ settings }: PropsProductsTable) {
 
 
     return (
-        <Container settings={settings}>
+        <Container screen={screen}>
 
             <div className="gradient">
                 <header><p>Produtos</p><p>Preços</p></header>
@@ -56,14 +62,15 @@ export default function ProductsTable({ settings }: PropsProductsTable) {
 
 
 const Container = styled.div<PropsProductsTable>`
-        width: 320%;
+        width: ${props => (props.screen.show_banner === false && props.screen.show_counter === false) ? 100 : props.screen.width_table}vw;
         height: 100%;
-        display: ${props => props.settings.showProductsTable === true ? "flex" : "none"};
+        display: ${props => props.screen.show_productstable === true ? "flex" : "none"};
         background-image: url(${background});
         background-repeat: no-repeat;
         background-size: cover;
         padding: 0 3rem;
         position: relative;
+        font-family: ${props => props.screen.font_family};
 
         .table{
             display: flex;
@@ -80,15 +87,15 @@ const Container = styled.div<PropsProductsTable>`
                 display: flex;
                 flex-direction: column;
                 overflow-wrap: break-word;
-                font-size: ${props => props.settings.fontSize}rem;
+                font-size: ${props => props.screen.font_size}rem;
 
                 .product{
                     display: flex;
                     justify-content: space-between;
                     padding-right: 1rem;
-                    margin-bottom: ${props => props.settings.spaceLines}rem;
+                    margin-bottom: ${props => props.screen.space_lines}rem;
                     z-index: 500;
-                    background-color: #0026ff;
+                    background-color: ${props => props.screen.color_lines};
                 }
             }
         }

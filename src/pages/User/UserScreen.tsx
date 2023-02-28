@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom"
 import styled from "styled-components"
 import MyContext from "../../context/context"
 import MyProducts from "./MyProducts"
-import RegisterProducts from "./RegisterProducts"
+import Screens from "./Screens"
 import UploadFiles from "./UploadFiles"
 
 export type ProductType = {
@@ -18,6 +18,7 @@ export default function UserScreen() {
     const { userData, setUserData } = useContext(MyContext)
     const [updatePage, setUpdatePage] = useState(false)
     const navigate = useNavigate()
+
 
     useEffect(() => {
         if (userData?.account_type === "admin") return navigate("/")
@@ -49,13 +50,11 @@ export default function UserScreen() {
 
             <div className="configContainer">
 
-                <RegisterProducts />
+                <MyProducts updatePage={updatePage} setUpdatePage={setUpdatePage} />
 
-                <MyProducts />
+                <UploadFiles updatePage={updatePage} setUpdatePage={setUpdatePage} />
 
-                <UploadFiles />
-
-                <button onClick={() => navigate("/tela")} className="init">Ir para Tela</button>
+                <Screens />
 
             </div>
         </Container>
@@ -68,6 +67,7 @@ const Container = styled.div`
     font-size: 2rem;
     overflow-wrap: break-word;
     overflow-x: hidden;
+    font-family: 'Roboto', sans-serif;
 
     .exit{
         position: absolute;

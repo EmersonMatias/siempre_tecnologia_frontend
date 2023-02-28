@@ -13,14 +13,22 @@ type FileType = {
     user_id: number
 }
 
-export default function UploadFiles() {
+type UploadFiles = {
+    screen_id: number
+}
+
+
+
+export default function UploadFiles({ screen_id }: UploadFiles) {
     const [file, setFile] = useState<File | null>(null);
     const [filename, setFilename] = useState<string>('');
-    const { config } = useContext(MyContext)
+    const token = localStorage.getItem("token")
+    const config = { headers: { Authorization: `Bearer ${token}` } }
     const [myFiles, setMyFiles] = useState<FileType[]>([])
-    const [updatePage, setUpdatePage] = useState(false)
     const [disableButton, setDisableButton] = useState(false)
-    console.log(myFiles)
+    const screenId = screen_id
+
+    console.log()
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files) {
@@ -35,34 +43,38 @@ export default function UploadFiles() {
             const formData = new FormData();
             formData.append('file', file);
             setDisableButton(true)
-            axios.post('http://localhost:4000/uploadfile', formData, config)
+            console.log(screen_id, "bbb")
+            axios.post(`http://localhost:4000/uploadfile/${screenId}`, formData, config)
                 .then((response) => {
                     setDisableButton(false)
                     setFile(null)
                     setFilename("")
-                    setUpdatePage(!updatePage)
+                    console.log(response)
                 })
                 .catch((error) => {
                     console.log(error);
                     setDisableButton(false)
-                    setUpdatePage(!updatePage)
                 });
         }
     }
 
     useEffect(() => {
-
         const getFiles = async () => {
-            try {
-                const sucess = await axios.get("http://localhost:4000/getfiles", config)
-                setMyFiles(sucess.data)
-            } catch (error) {
-                console.log(error)
+            if (screenId) {
+                try {
+                    console.log(screen_id, "SCREN")
+                    const sucess = await axios.get(`http://localhost:4000/getfiles/${screen_id}`, config)
+                    console.log(sucess)
+                    setMyFiles(sucess.data)
+                } catch (error) {
+                    console.log(error)
+                }
             }
+
         }
         getFiles()
 
-    }, [updatePage])
+    }, [screenId])
 
     return (
         <Container>
@@ -77,7 +89,7 @@ export default function UploadFiles() {
             </form>
             <h1>Meus Arquivos</h1>
             <div className="files">
-                {myFiles?.map((file) => (<img src={`${file.url}`}/>))}
+                {myFiles?.map((file) => (<img src={`${file.url}`} />))}
             </div>
         </Container>
     )
@@ -129,7 +141,7 @@ const Container = styled.div`
         background-color: #ffffff;
 
         img{
-            height: 350px;
+            height: 200px;
             margin-left: 2rem;
             margin-bottom: 2rem;
             border-radius: 16px;
