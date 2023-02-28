@@ -17,23 +17,23 @@ type PropsProductsTable = {
         user_id: number,
         color_lines: string,
         width_table: number
-    }
+    },
+    Products: ProductType[]
 }
 
 
 
-export default function ProductsTable({ screen }: PropsProductsTable) {
+export default function ProductsTable({ screen, Products}: PropsProductsTable) {
     const quantityLines = screen.table_lines
     const [init, setInit] = useState(0)
     const [end, setEnd] = useState(quantityLines)
     const list: any = localStorage.getItem("list")
-    const product:ProductType[] = JSON.parse(list)
-    const products = product?.slice(init, end)
+    const products = Products?.slice(init, end)
 
-    console.log(screen.width_table)
+
     useEffect(() => {
         const interval = setInterval(() => {
-            if (end >= product.length - 1) return setInit(0), setEnd(quantityLines)
+            if (end >= Products.length - 1) return setInit(0), setEnd(quantityLines)
             setInit(init + quantityLines)
             setEnd(end + quantityLines)
 
@@ -46,7 +46,7 @@ export default function ProductsTable({ screen }: PropsProductsTable) {
 
 
     return (
-        <Container screen={screen}>
+        <Container screen={screen} Products={Products}>
 
             <div className="gradient">
                 <header><p>Produtos</p><p>Preços</p></header>
@@ -65,7 +65,7 @@ const Container = styled.div<PropsProductsTable>`
         width: ${props => (props.screen.show_banner === false && props.screen.show_counter === false) ? 100 : props.screen.width_table}vw;
         height: 100%;
         display: ${props => props.screen.show_productstable === true ? "flex" : "none"};
-        background-image: url(${background});
+        background-image: url(${props => props.screen.background_url});
         background-repeat: no-repeat;
         background-size: cover;
         padding: 0 3rem;

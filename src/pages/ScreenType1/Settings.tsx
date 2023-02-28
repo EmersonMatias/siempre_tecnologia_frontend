@@ -1,52 +1,31 @@
 import { useState } from "react";
 import styled from "styled-components"
 import Close from "../../img/iconClose.svg"
+import { Screen } from "../../types/types";
+import MyProducts, { ProductType2 } from "../User/MyProducts";
 import UploadFiles from "../User/UploadFiles";
+import { ProductType } from "../User/UserScreen";
 
 
 type PropsProductsTable = {
     settings: {
-        settingVisible: boolean
+        settingVisible: boolean,
+        update: boolean
     }
     setSettings: React.Dispatch<React.SetStateAction<{
         settingVisible: boolean;
+        update: boolean
     }>>
-    screen: {
-        background_url: string,
-        font_family: string,
-        font_size: number,
-        id: number,
-        screen_name: string,
-        show_banner: boolean,
-        show_counter: boolean,
-        show_productstable: boolean,
-        space_lines: number,
-        table_lines: number,
-        user_id: number,
-        color_lines: string,
-        width_table: number
-    }
-    setScreen: React.Dispatch<React.SetStateAction<{
-        background_url: string,
-        font_family: string,
-        font_size: number,
-        id: number,
-        screen_name: string,
-        show_banner: boolean,
-        show_counter: boolean,
-        show_productstable: boolean,
-        space_lines: number,
-        table_lines: number,
-        user_id: number,
-        color_lines: string,
-        width_table: number
-    }>>
+    screen: Screen
+    setScreen: React.Dispatch<React.SetStateAction<Screen>>
+    myProducts: ProductType2[]
+    ProductsId: Array<Number>
 }
 
-export default function Settings({ settings, setSettings, screen, setScreen }: PropsProductsTable) {
+export default function Settings({ settings, setSettings, screen, setScreen, myProducts, ProductsId }: PropsProductsTable) {
     const [a, setA] = useState({ x: 0, y: 0 })
 
-    console.log(screen.id, "qaaaa")
+
     function handleDragEnd(event: any) {
         const element = event.target;
         const container = element.parentElement;
@@ -90,8 +69,10 @@ export default function Settings({ settings, setSettings, screen, setScreen }: P
                 <div>Largura da Tabela de Produtos: <input type={"number"} min={50} max={100} value={screen.width_table} onChange={(e) => setScreen({ ...screen, width_table: Number(e.target.value) })}></input></div>
             </div>
 
-            <UploadFiles screen_id={screen.id}/>
-            <div className="save" onClick={() => { }}>salvar</div>
+            <UploadFiles screen_id={screen.id} />
+
+            <MyProducts myProducts={myProducts} screen_id={screen.id} ProductsId={ProductsId} settings={settings} setSettings={setSettings}/>
+
         </Container>
     )
 }
@@ -119,8 +100,8 @@ type Props = {
 }
 
 const Container = styled.div<Props>`
-    width: 30%;
-    height: 50vh;
+    width: 50%;
+    height: 60vh;
     background-color: white;
     top: ${props => props.top}px;
     left: ${props => props.left}px;
@@ -194,11 +175,6 @@ const Container = styled.div<Props>`
 
     .banner{
         background-color: ${props => props.screen.show_banner === true ? "green" : "red"};
-    }
-
-    .save{
-        position: absolute;
-        bottom: 2rem;
     }
 `
 

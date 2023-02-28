@@ -7,26 +7,15 @@ import iconSetting from "../../img/iconSetting.svg"
 import axios from "axios"
 import MyContext from "../../context/context"
 import { useParams } from "react-router-dom"
+import { ProductScreen, Screen } from "../../types/types"
+import { ProductType } from "../User/UserScreen"
+import { ProductType2 } from "../User/MyProducts"
 
-type Screen = {
-    background_url: string,
-    font_family: string,
-    font_size: number,
-    id: number,
-    screen_name: string,
-    show_banner: boolean,
-    show_counter: boolean,
-    show_productstable: boolean,
-    space_lines: number,
-    table_lines: number,
-    user_id: number,
-    color_lines: string,
-    width_table: number
-}
+
 
 export default function ScreenType1() {
     const [password, setPassword] = useState(0)
-    const [screen,setScreen] = useState<Screen>({
+    const [screen, setScreen] = useState<Screen>({
         background_url: "",
         font_family: "",
         font_size: 1,
@@ -41,28 +30,34 @@ export default function ScreenType1() {
         color_lines: "",
         width_table: 0
     })
-    const { config } = useContext(MyContext)
+    const token = localStorage.getItem("token")
+    const config = { headers: { Authorization: `Bearer ${token}` } }
     const [settings, setSettings] = useState({
         settingVisible: false,
+        update: false
     })
     const screen_id = useParams().id
+    const [myProducts, setMyProducts] = useState<ProductType2[]>([])
+    const [myProductsScreen, setMyProductsScreen] = useState<ProductScreen[]>([])
+    const ProductsId: Number[] = myProductsScreen.map((product) => (product?.product_id))
+    const Products: ProductType[] = myProductsScreen.map((product) => product?.products)
+    
 
-     function passwordConfigs(){
+
+    function passwordConfigs() {
         setPassword(password + 1)
-  
+
         if ('speechSynthesis' in window) {
             const utterance = new SpeechSynthesisUtterance();
-            utterance.text = `Senha ${password+1}. repetindo.senha ${password+1}`;
+            utterance.text = `Senha ${password + 1}. repetindo.senha ${password + 1}`;
             utterance.lang = 'pt-BR';
             utterance.rate = 1.2;
             utterance.pitch = 1;
             utterance.volume = 1;
             speechSynthesis.speak(utterance);
         }
-          
     }
-
-
+ 
     useEffect(() => {
         const screens = async () => {
             try {
@@ -73,14 +68,32 @@ export default function ScreenType1() {
             }
         }
         screens()
-    }, [])
+        const getProducts = async () => {
+            try {
+                const productsList = await axios.get("http://localhost:4000/products", config)
+                setMyProducts(productsList.data)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        getProducts()
+        const getProductsScreen = async() => {
+            try{
+                const sucess = await axios.get(`http://localhost:4000/productsscreen/${screen_id}`, config)
+                setMyProductsScreen(sucess.data)
+            }catch(error){
+                console.log(error)
+            }
+        }
+        getProductsScreen()
+    }, [settings.update])
 
     return (
         <Container onKeyDown={(event) => event.key === "Enter" ? passwordConfigs() : ""} tabIndex={0}>
-            <Settings settings={settings} setSettings={setSettings} screen={screen} setScreen={setScreen}/>
-            <SideBar password={password} screen={screen}/>
-            <ProductsTable screen={screen}/>
-            <img className="settings" src={iconSetting} onClick={() => setSettings({...settings, settingVisible: true})}/>
+            <Settings settings={settings} setSettings={setSettings} screen={screen} setScreen={setScreen} myProducts={myProducts} ProductsId={ProductsId} />
+            <SideBar password={password} screen={screen} />
+            <ProductsTable screen={screen} Products={Products} />
+            <img className="settings" src={iconSetting} onClick={() => setSettings({ ...settings, settingVisible: true })} />
         </Container>
     )
 }
@@ -94,7 +107,7 @@ const Container = styled.div`
     overflow: hidden;
     position: relative;
     
-
+ 
     .settings{
         width: 60px;
         position: fixed;

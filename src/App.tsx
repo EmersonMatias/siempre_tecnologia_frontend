@@ -19,7 +19,6 @@ function App() {
     id: 0
   })
   const config = { headers: { Authorization: `Bearer ${userData?.token}` } }
-  console.log(config)
 
   return (
     <BrowserRouter>

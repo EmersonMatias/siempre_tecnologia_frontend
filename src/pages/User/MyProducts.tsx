@@ -1,66 +1,51 @@
 import axios from "axios"
-import { useContext, useEffect, useState } from "react"
 import styled from "styled-components"
-import MyContext from "../../context/context"
 import { ProductType } from "./UserScreen"
 
-type UserScreenProps = {
-    updatePage: boolean,
-    setUpdatePage: React.Dispatch<React.SetStateAction<boolean>>
+
+export type ProductType2 = {
+    id: number
+    code: number,
+    type: string,
+    product: string,
+    price: number,
+    user_id: number
 }
 
-export default function MyProducts({ updatePage, setUpdatePage }: UserScreenProps) {
-    const { config } = useContext(MyContext)
-    const list: any = localStorage.getItem("list")
-    const [myProducts, setMyProducts] = useState<ProductType[]>([])
-    const productsSelected: ProductType[] = JSON.parse(list)
-    const productsCode = productsSelected?.map((e: ProductType) => (e.code))
+type a = {
+    myProducts: ProductType2[],
+    screen_id: number,
+    ProductsId: Array<Number>,
+    settings: {
+        settingVisible: boolean,
+        update: boolean
+    }
+    setSettings: React.Dispatch<React.SetStateAction<{
+        settingVisible: boolean;
+        update: boolean
+    }>>
+}
 
-    useEffect(() => {
-        const getProducts = async () => {
-            try {
-                const productsList = await axios.get("http://localhost:4000/products", config)
-                setMyProducts(productsList.data)
-            } catch (error) {
+export default function MyProducts({ myProducts, screen_id , ProductsId, settings, setSettings}: a) {
+    const token = localStorage.getItem("token")
+    const config = { headers: { Authorization: `Bearer ${token}` } }
+    
+
+    function selectProduct(product: ProductType){
+     
+        const sendProduct = async () => {
+            try{
+               const sucess = await axios.post(`http://localhost:4000/productsscreen/${screen_id}`, product, config)
+                console.log(sucess)
+                setSettings({...settings, update: !settings.update})
+            }catch(error){
                 console.log(error)
             }
         }
-        getProducts()
-    }, [updatePage])
 
-    function showPr(item: ProductType) {
-        const products: ProductType[] = JSON.parse(list)
-        console.log(products)
-
-        if ((products?.find((product, index) => (product.code === item.code)))) {
-            let indexProduct: number = -1;
-
-            const a = products?.map((product, index) => (
-                product.code === item.code ? indexProduct = index : ""
-            ))
-
-            console.log(products)
-            localStorage.removeItem("list")
-            products.splice(indexProduct, 1)
-            console.log(products)
-            localStorage.setItem("list", JSON.stringify(products))
-            return setUpdatePage(!updatePage)
-        }
-
-        if (products === null) {
-            localStorage.removeItem("list")
-            const newProducts = [item]
-            localStorage.setItem("list", JSON.stringify(newProducts))
-
-        } else {
-
-            localStorage.removeItem("list")
-            const newProducts = [...products, item]
-            localStorage.setItem("list", JSON.stringify(newProducts))
-        }
-
-        setUpdatePage(!updatePage)
+        sendProduct()
     }
+
 
     return (
         <Container>
@@ -78,8 +63,8 @@ export default function MyProducts({ updatePage, setUpdatePage }: UserScreenProp
                             </tr>
                         </thead>
                         <tbody>
-                            {myProducts.map((product, index) => (
-                                <tr key={index} onClick={() => { showPr(product) }} className={productsCode?.includes(product.code) ? "back" : ""}>
+                            {myProducts?.map((product, index) => (
+                                <tr key={index} onClick={() => selectProduct(product)} className={`${ProductsId?.includes(product.id) ? "back" : ""}`}>
                                     <td>{product.code}</td>
                                     <td>{product.product}</td>
                                     <td>{product.type}</td>
@@ -90,49 +75,23 @@ export default function MyProducts({ updatePage, setUpdatePage }: UserScreenProp
                     </table>
                 </div>
             </div>
-            <div className="containers">
-                <h1>Produtos Selecionados</h1>
-                <div className="productsSelected">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Código</th>
-                                <th>Produto</th>
-                                <th>Und</th>
-                                <th>Preço</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {productsSelected?.map((product, index) => (
-                                <tr key={index} onClick={() => { showPr(product) }}>
-                                    <td>{product.code}</td>
-                                    <td>{product.product}</td>
-                                    <td>{product.type}</td>
-                                    <td>R$ {(Number(product.price) / 100).toFixed(2).replace(".", ",")}</td>
-                                </tr>))}
-                        </tbody>
-
-                    </table>
-                </div>
-            </div>
-
-
         </Container>
     )
 }
 
 const Container = styled.div`
-    padding: 2rem;
+    padding: 2.4rem;
     display: flex;
     justify-content: space-between;
     margin-bottom: 5rem;
 
+
     .containers{
-        width: 40%;
-        height: 800px;
+        width: 100%;
+        height: 500px;
     }
 
-    .myProductsContainer, .productsSelected{
+    .myProductsContainer{
         width: 100%;
         height: 100%;
         font-size: 1.4rem;
@@ -164,15 +123,6 @@ const Container = styled.div`
     }
 
     .myProductsContainer::-webkit-scrollbar-thumb {
-        background: #000000;
-        border-radius: 8px;     
-    }
-
-    .productsSelected::-webkit-scrollbar {
-        width: 10px;     
-    }
-
-    .productsSelected::-webkit-scrollbar-thumb {
         background: #000000;
         border-radius: 8px;     
     }

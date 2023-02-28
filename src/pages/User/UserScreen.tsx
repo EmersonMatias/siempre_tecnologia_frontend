@@ -1,10 +1,12 @@
+import axios from "axios"
 import { useContext, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import styled from "styled-components"
 import MyContext from "../../context/context"
-import MyProducts from "./MyProducts"
+import MyProducts, { ProductType2 } from "./MyProducts"
 import Screens from "./Screens"
-import UploadFiles from "./UploadFiles"
+
+
 
 export type ProductType = {
     code: number,
@@ -15,14 +17,26 @@ export type ProductType = {
 }
 
 export default function UserScreen() {
-    const { userData, setUserData } = useContext(MyContext)
+    const { userData, setUserData, config } = useContext(MyContext)
     const [updatePage, setUpdatePage] = useState(false)
     const navigate = useNavigate()
-
+    const [myProducts, setMyProducts] = useState<ProductType2[]>([])
 
     useEffect(() => {
         if (userData?.account_type === "admin") return navigate("/")
         if (userData.token === "") return navigate("/")
+
+
+        const getProducts = async () => {
+            try {
+                const productsList = await axios.get("http://localhost:4000/products", config)
+                console.log(productsList.data, "aaaaaaaaaaaa")
+                setMyProducts(productsList.data)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        getProducts()
     }, [updatePage])
 
     function exitAccount() {
@@ -50,10 +64,8 @@ export default function UserScreen() {
 
             <div className="configContainer">
 
-                <MyProducts updatePage={updatePage} setUpdatePage={setUpdatePage} />
-
-                <UploadFiles updatePage={updatePage} setUpdatePage={setUpdatePage} />
-
+             
+           
                 <Screens />
 
             </div>

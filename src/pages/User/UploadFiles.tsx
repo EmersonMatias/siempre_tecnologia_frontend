@@ -28,8 +28,6 @@ export default function UploadFiles({ screen_id }: UploadFiles) {
     const [disableButton, setDisableButton] = useState(false)
     const screenId = screen_id
 
-    console.log()
-
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files) {
             setFile(event.target.files[0]);
@@ -62,9 +60,7 @@ export default function UploadFiles({ screen_id }: UploadFiles) {
         const getFiles = async () => {
             if (screenId) {
                 try {
-                    console.log(screen_id, "SCREN")
                     const sucess = await axios.get(`http://localhost:4000/getfiles/${screen_id}`, config)
-                    console.log(sucess)
                     setMyFiles(sucess.data)
                 } catch (error) {
                     console.log(error)
@@ -89,7 +85,7 @@ export default function UploadFiles({ screen_id }: UploadFiles) {
             </form>
             <h1>Meus Arquivos</h1>
             <div className="files">
-                {myFiles?.map((file) => (<img src={`${file.url}`} />))}
+                {myFiles?.map((file, index) => (<img key={index} src={`${file.url}`} />))}
             </div>
         </Container>
     )
@@ -134,9 +130,9 @@ const Container = styled.div`
 
     .files{
         margin: 2rem 0;
+        padding: 2rem;
         display: flex;
         flex-wrap: wrap;
-        height: 800px;
         overflow-y: scroll;
         background-color: #ffffff;
 

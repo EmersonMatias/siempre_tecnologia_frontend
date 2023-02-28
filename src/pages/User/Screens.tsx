@@ -3,13 +3,14 @@ import { useContext, useEffect, useState } from "react"
 import styled from "styled-components"
 import MyContext from "../../context/context"
 import { useNavigate } from "react-router-dom"
+import { Screen } from "../../types/types"
 
 export default function Screens() {
     const { config } = useContext(MyContext)
     const [displayForm, setDisplayForm] = useState(false)
     const [screenName, setScreenName] = useState("")
     const [screenType, setScreenType] = useState<"açogue" | "padaria" | "neutro">("neutro")
-    const [screens, setScreens] = useState([])
+    const [screens, setScreens] = useState<Screen[]>([])
     const navigate = useNavigate()
     console.log(screens)
 
@@ -45,7 +46,7 @@ export default function Screens() {
     return (
         <Container displayForm={displayForm} screenType={screenType}>
             <h1>Telas</h1>
-            <div>
+            <div className="container_screens">
                 {screens?.map((screen) => (<div className="screen" onClick={() => navigate(`/tela/${screen.id}`)}>{screen.screen_name}</div>))}
             </div>
 
@@ -71,9 +72,15 @@ const Container = styled.div<ScreensProps>`
     width: 100%;
     padding: 2rem;
     font-size: 1.6rem;
+    background-color: rgb(0,0,0,0.03);
 
     h1{
         margin-bottom: 1.6rem;
+    }
+
+    .container_screens{
+        display: flex;
+        padding: 2rem;
     }
 
     .screen{
@@ -83,6 +90,7 @@ const Container = styled.div<ScreensProps>`
         display: flex;
         align-items: center;
         justify-content: center;
+        margin: 0 auto;
     }
 
     form{
