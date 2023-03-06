@@ -3,7 +3,8 @@ import { useContext, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import styled from "styled-components"
 import MyContext from "../../context/context"
-import MyProducts, { ProductType2 } from "./MyProducts"
+import BlockPage from "../Block/BlockPage"
+import { ProductType2 } from "./MyProducts"
 import Screens from "./Screens"
 
 
@@ -20,6 +21,7 @@ export default function UserScreen() {
     const { userData, setUserData, config } = useContext(MyContext)
     const [updatePage, setUpdatePage] = useState(false)
     const navigate = useNavigate()
+    const active = localStorage.getItem("active")
     const [myProducts, setMyProducts] = useState<ProductType2[]>([])
 
     useEffect(() => {
@@ -57,9 +59,11 @@ export default function UserScreen() {
 
     return (
         <Container >
+            {active === "true" ? null : <BlockPage/>}
             <header><h1>Tabela de Configurações</h1>    <div className="exit" onClick={() => exitAccount()}>
                 Sair
             </div></header>
+
 
 
             <div className="configContainer">
@@ -87,6 +91,7 @@ const Container = styled.div`
         font-size: 1.6rem;
         font-weight: bold;
         color: rgb(0,0,0,0.5);
+        z-index: 100000;
 
         &:hover{
             color: red;

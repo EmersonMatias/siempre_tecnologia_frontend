@@ -1,23 +1,9 @@
 import { useEffect, useState } from "react"
 import styled from "styled-components"
-import background from "../../img/background2.png"
+import { Screen } from "../../types/types"
 import { ProductType } from "../User/UserScreen"
 type PropsProductsTable = {
-    screen:{
-        background_url: string,
-        font_family: string,
-        font_size: number,
-        id: number,
-        screen_name: string,
-        show_banner: boolean,
-        show_counter: boolean,
-        show_productstable: boolean,
-        space_lines: number,
-        table_lines: number,
-        user_id: number,
-        color_lines: string,
-        width_table: number
-    },
+    screen: Screen,
     Products: ProductType[]
 }
 
@@ -29,7 +15,7 @@ export default function ProductsTable({ screen, Products}: PropsProductsTable) {
     const [end, setEnd] = useState(quantityLines)
     const list: any = localStorage.getItem("list")
     const products = Products?.slice(init, end)
-
+    
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -41,18 +27,17 @@ export default function ProductsTable({ screen, Products}: PropsProductsTable) {
         console.log(interval)
         return () => clearInterval(interval);
 
+    }, [init, quantityLines, screen.table_lines, Products])
 
-    }, [init, quantityLines])
-
-
+ 
     return (
         <Container screen={screen} Products={Products}>
 
             <div className="gradient">
-                <header><p>Produtos</p><p>Preços</p></header>
+                <header><p className="products">Produtos</p><p className="prices">Preços</p></header>
                 <div className="table">
                     <div className="products">
-                        {products?.map((e, index) => (<div className="product"><p>{e.product}{index}</p><p>R$ {(e.price/100).toFixed(2).replace(".", ",")}</p></div>))}
+                        {products?.map((e, index) => (<div className="product" onClick={() => alert(`clicou em ${e.product}`)}><p>{e.product}{index}</p><p>R$ {(e.price/100).toFixed(2).replace(".", ",")}</p></div>))}
                     </div>
                 </div>
             </div>
@@ -71,6 +56,31 @@ const Container = styled.div<PropsProductsTable>`
         padding: 0 3rem;
         position: relative;
         font-family: ${props => props.screen.font_family};
+    
+
+        header{
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1.6rem;
+            font-family: ${props => props.screen.font_family_title};
+            font-size: 5vw;
+            z-index: 520;
+            color: ${props => props.screen.color_title};
+
+            .products{
+                display: flex;
+                background-color: ${props => props.screen.background_color_title};
+                width: 70%;
+                justify-content: ${props => props.screen.product_position};
+            }
+
+            .prices{
+                display: flex;
+                background-color: ${props => props.screen.background_color_title};
+                width: 30%;
+                justify-content:  ${props => props.screen.price_position};
+            }
+        }
 
         .table{
             display: flex;
@@ -81,6 +91,7 @@ const Container = styled.div<PropsProductsTable>`
             background: rgba(255, 255, 255, 0.1);
             border-radius: 8px;
             padding: 1.6rem;
+            color: ${props => props.screen.color};
 
             .products{
                 width: 100%;

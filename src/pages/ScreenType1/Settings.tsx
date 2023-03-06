@@ -4,7 +4,8 @@ import Close from "../../img/iconClose.svg"
 import { Screen } from "../../types/types";
 import MyProducts, { ProductType2 } from "../User/MyProducts";
 import UploadFiles from "../User/UploadFiles";
-import { ProductType } from "../User/UserScreen";
+import { Change } from "./functionsSettings";
+
 
 
 type PropsProductsTable = {
@@ -25,7 +26,6 @@ type PropsProductsTable = {
 export default function Settings({ settings, setSettings, screen, setScreen, myProducts, ProductsId }: PropsProductsTable) {
     const [a, setA] = useState({ x: 0, y: 0 })
 
-
     function handleDragEnd(event: any) {
         const element = event.target;
         const container = element.parentElement;
@@ -39,34 +39,100 @@ export default function Settings({ settings, setSettings, screen, setScreen, myP
     return (
         <Container draggable="true" onDragEnd={(event) => handleDragEnd(event)} top={a.y} left={a.x} settings={settings} screen={screen}>
             <h1>Configurações</h1>
+
             <div className="close" onClick={() => setSettings({ ...settings, settingVisible: false })}>
                 <img src={Close} />
             </div>
+
             <div className="configLayoutContainer">
-                <div>Exibir Contador <button className="counter" onClick={() => setScreen({ ...screen, show_counter: !screen.show_counter })}>
-                    {screen.show_counter === true ? "Ativado" : "Desativado"}
-                </button></div>
-                <div>Exibir Tabela de Produtos <button className="productsTable" onClick={() => setScreen({ ...screen, show_productstable: !screen.show_productstable })}>
-                    {screen.show_productstable === true ? "Ativado" : "Desativado"}
-                </button></div>
-                <div>Exibir Banner <button className="banner" onClick={() => setScreen({ ...screen, show_banner: !screen.show_banner })}>
-                    {screen.show_banner === true ? "Ativado" : "Desativado"}
-                </button></div>
+                <div>
+                    Exibir Contador:
+                    <button className="counter" onClick={() => Change.ShowCounter(screen, setScreen)}>
+                        {screen.show_counter === true ? "Ativado" : "Desativado"}
+                    </button>
+                </div>
+                <div>
+                    Exibir Tabela de Produtos: 
+                    <button className="productsTable" onClick={() => Change.ShowProductTable(screen, setScreen)}>
+                        {screen.show_productstable === true ? "Ativado" : "Desativado"}
+                    </button>
+                </div>
+                <div>
+                    Exibir Banner:
+                    <button className="banner" onClick={() => Change.ShowBanner(screen, setScreen)}>
+                        {screen.show_banner === true ? "Ativado" : "Desativado"}
+                    </button>
+                </div>
+                <div>
+                    Tempo entre banners:
+                    <input type={"number"} min={1} onChange={(event) => {Change.BannerTime(event, screen, setScreen)}} value={screen.banner_time/1000}/>
+
+                </div>
             </div>
-            <div className="configProductsTable">
-                <div className="numberLines">Número de linhas: <input type={"number"} onChange={(e) => setScreen({ ...screen, table_lines: Number(e.target.value) })} value={screen.table_lines} min={0} /></div>
-                <div className="spaceLines">Espaçamento entre Linhas: <input type={"number"} onChange={(e) => setScreen({ ...screen, space_lines: Number(e.target.value) })} value={screen.space_lines} min={0} /></div>
-                <div className="spaceLines">Tamanho da Fonte: <input type={"number"} onChange={(e) => setScreen({ ...screen, font_size: Number(e.target.value) })} value={screen.font_size} min={1} /></div>
-                <select onChange={(e) => setScreen({ ...screen, font_family: e.target.value })}>
+
+            <div className="configTitleTable">
+                <div>
+                    Posição de Produtos: 
+                    <button onClick={() => Change.PositionProductLeft(screen, setScreen)}>Esquerda</button>
+                    <button onClick={() => Change.PositionProductCenter(screen, setScreen)}>Centralizado</button> 
+                    <button onClick={() => Change.PositionProductRight(screen, setScreen)}>Direita</button>
+                </div>
+                <div>
+                    Posição de Preços: 
+                    <button onClick={() => Change.PositionPriceLeft(screen, setScreen)}>Esquerda</button> 
+                    <button onClick={() => Change.PositionPriceCenter(screen, setScreen)}>Centralizado</button> 
+                    <button onClick={() => Change.PositionPriceRight(screen, setScreen)}>Direita</button>
+                </div>
+                <div className="color_lines">
+                    Cor das linhas:
+                    <input onChange={(event) => Change.BackgroundColorTitle(event, screen, setScreen) } type={"color"}  />
+                    <button onClick={() => Change.BackgroundColorTitleNone(screen, setScreen)}>Sem Cor</button>
+                </div>
+                <select onChange={(event) => Change.FontFamilyTitle(event, screen, setScreen)}>
                     <option value="'Handlee', cursive">Handlee</option>
                     <option value="'Open Sans', sans-serif">Open Sans</option>
                     <option value="'Gloria Hallelujah', cursive">Gloria Hallelujah</option>
                     <option value="'Roboto', sans-serif">Roboto</option>
+                    <option value="'Lilita One', cursive">Lilita One</option>
                 </select>
-                <div className="color_lines">Cor das linhas: <input type={"color"} onChange={(e) => setScreen({ ...screen, color_lines: e.target.value })}></input>
-                    <input type={"button"} value="Sem cor" className="color_line_input" onClick={(e) => setScreen({ ...screen, color_lines: "" })}></input>
+                <div className="color">
+                    Cor da letra:
+                    <input onChange={(event) => Change.ColorTitle(event, screen, setScreen) } type={"color"}  />
                 </div>
-                <div>Largura da Tabela de Produtos: <input type={"number"} min={50} max={100} value={screen.width_table} onChange={(e) => setScreen({ ...screen, width_table: Number(e.target.value) })}></input></div>
+            </div>
+
+            <div className="configProductsTable">
+                <div className="numberLines">
+                    Número de linhas: 
+                    <input type={"number"} onChange={(event) => Change.NumberLines(event, screen, setScreen) } value={screen.table_lines} min={0} />
+                </div>
+                <div className="spaceLines">
+                    Espaçamento entre Linhas: 
+                    <input type={"number"} onChange={(event) => Change.SpaceLines(event, screen, setScreen )} value={screen.space_lines} min={0} />
+                </div>
+                <div className="spaceLines">
+                    Tamanho da Fonte:
+                    <input type={"number"} onChange={(event) => Change.Font_Size(event, screen, setScreen)} value={screen.font_size} min={1} />
+                </div>
+                <select onChange={(event) => Change.Font_Family(event, screen, setScreen)}>
+                    <option value="'Handlee', cursive">Handlee</option>
+                    <option value="'Open Sans', sans-serif">Open Sans</option>
+                    <option value="'Gloria Hallelujah', cursive">Gloria Hallelujah</option>
+                    <option value="'Roboto', sans-serif">Roboto</option>
+                    <option value="'Lilita One', cursive">Lilita One</option>
+                </select>
+                <div className="color_lines">
+                    Cor das linhas:
+                    <input onChange={(event) => Change.Color(event, screen, setScreen) } type={"color"}  />
+                    <button onClick={(event) => Change.NoColor(event, screen, setScreen)}>Sem Cor</button>
+                </div>
+                <div>Largura da Tabela de Produtos:
+                    <input onChange={(event) =>Change.WidthProductTable(event, screen, setScreen)} type={"number"} min={50} max={100} value={screen.width_table} />
+                </div>
+                <div className="color">
+                    Cor da letra:
+                    <input onChange={(event) => Change.ColorLetter(event, screen, setScreen) } type={"color"}  />
+                </div>
             </div>
 
             <UploadFiles screen_id={screen.id} />
@@ -83,20 +149,7 @@ type Props = {
     settings: {
         settingVisible: boolean,
     },
-    screen: {
-        background_url: string,
-        font_family: string,
-        font_size: number,
-        id: number,
-        screen_name: string,
-        show_banner: boolean,
-        show_counter: boolean,
-        show_productstable: boolean,
-        space_lines: number,
-        table_lines: number,
-        user_id: number,
-        color_lines: string
-    }
+    screen: Screen
 }
 
 const Container = styled.div<Props>`
@@ -115,6 +168,7 @@ const Container = styled.div<Props>`
     font-size: 1.4rem;
     font-weight: bold;
     overflow-y: scroll;
+    font-family: Arial, Helvetica, sans-serif;
 
     .color_line_input{
         background-color: #FFFFFF;
@@ -144,7 +198,7 @@ const Container = styled.div<Props>`
         margin: 0.5rem 0;
     }
 
-    .configLayoutContainer, .configProductsTable{
+    .configLayoutContainer, .configProductsTable, .configTitleTable{
         margin-top: 2rem;
         width: 80%;
     }

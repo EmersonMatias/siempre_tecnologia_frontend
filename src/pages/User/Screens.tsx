@@ -5,6 +5,7 @@ import MyContext from "../../context/context"
 import { useNavigate } from "react-router-dom"
 import { Screen } from "../../types/types"
 
+
 export default function Screens() {
     const { config } = useContext(MyContext)
     const [displayForm, setDisplayForm] = useState(false)
@@ -12,7 +13,7 @@ export default function Screens() {
     const [screenType, setScreenType] = useState<"açogue" | "padaria" | "neutro">("neutro")
     const [screens, setScreens] = useState<Screen[]>([])
     const navigate = useNavigate()
-    console.log(screens)
+
 
     function createNewScreen(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault()
@@ -45,6 +46,7 @@ export default function Screens() {
 
     return (
         <Container displayForm={displayForm} screenType={screenType}>
+      
             <h1>Telas</h1>
             <div className="container_screens">
                 {screens?.map((screen) => (<div className="screen" onClick={() => navigate(`/tela/${screen.id}`)}>{screen.screen_name}</div>))}

@@ -33,7 +33,14 @@ export type Screen = {
     table_lines: number,
     user_id: number,
     color_lines: string,
-    width_table: number
+    width_table: number,
+    price_position: string,
+    product_position: string,
+    background_color_title: string,
+    font_family_title: string,
+    color: string,
+    color_title: string,
+    banner_time: number
 }
 
 export type ProductScreen = {
@@ -43,4 +50,14 @@ export type ProductScreen = {
     screen_id: number,
     user_id: number
 
+}
+
+export type Files = {
+    file_name: string,
+    id: number,
+    original_name: string,
+    screen_od: number,
+    size: number,
+    url: string,
+    user_id: number
 }

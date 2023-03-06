@@ -5,8 +5,7 @@ import Settings from "./Settings"
 import SideBar from "./SideBar"
 import iconSetting from "../../img/iconSetting.svg"
 import axios from "axios"
-import MyContext from "../../context/context"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { ProductScreen, Screen } from "../../types/types"
 import { ProductType } from "../User/UserScreen"
 import { ProductType2 } from "../User/MyProducts"
@@ -28,7 +27,14 @@ export default function ScreenType1() {
         table_lines: 1,
         user_id: 0,
         color_lines: "",
-        width_table: 0
+        width_table: 0,
+        price_position: "",
+        product_position: "",
+        background_color_title: "",
+        font_family_title: "",
+        color: "",
+        color_title: "",
+        banner_time: 1000
     })
     const token = localStorage.getItem("token")
     const config = { headers: { Authorization: `Bearer ${token}` } }
@@ -41,8 +47,8 @@ export default function ScreenType1() {
     const [myProductsScreen, setMyProductsScreen] = useState<ProductScreen[]>([])
     const ProductsId: Number[] = myProductsScreen.map((product) => (product?.product_id))
     const Products: ProductType[] = myProductsScreen.map((product) => product?.products)
-    
-
+    const active = localStorage.getItem("active")
+    const navigate = useNavigate()
 
     function passwordConfigs() {
         setPassword(password + 1)
@@ -59,6 +65,10 @@ export default function ScreenType1() {
     }
  
     useEffect(() => {
+        if(active !== "true"){
+            navigate("/user")
+        }
+
         const screens = async () => {
             try {
                 const sucess = await axios.get(`http://localhost:4000/screen/${screen_id}`, config)
@@ -131,12 +141,4 @@ const Container = styled.div`
         padding: 0 4rem;
     }
 
-    header{
-        display: flex;
-        justify-content: space-between;
-        margin-top: 1.6rem;
-        font-family: 'Lilita One', cursive;
-        font-size: 5vw;
-        z-index: 520;
-    }
 `
