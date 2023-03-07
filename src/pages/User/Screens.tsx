@@ -5,13 +5,13 @@ import MyContext from "../../context/context"
 import { useNavigate } from "react-router-dom"
 import { Screen } from "../../types/types"
 
-
 export default function Screens() {
     const { config } = useContext(MyContext)
     const [displayForm, setDisplayForm] = useState(false)
     const [screenName, setScreenName] = useState("")
     const [screenType, setScreenType] = useState<"açogue" | "padaria" | "neutro">("neutro")
     const [screens, setScreens] = useState<Screen[]>([])
+    const [buttonDisabled, setButtoDisabled] = useState(false)
     const navigate = useNavigate()
 
 
@@ -19,11 +19,17 @@ export default function Screens() {
         event.preventDefault()
 
         const send = async () => {
+           setButtoDisabled(true)
             try {
+
                 const sucess = await axios.post("http://localhost:4000/screens", { screen_name: screenName, screen_type: screenType }, config)
+                setDisplayForm(false)
+                setButtoDisabled(false)
+                setScreenName("")
                 console.log(sucess)
             } catch (error) {
                 console.log(error)
+                setButtoDisabled(false)
             }
         }
 
@@ -57,7 +63,7 @@ export default function Screens() {
                 <input className={`type ${screenType === "açogue" ? "selected" : ""}`} type={"button"} value="Açogue" onClick={() => setScreenType("açogue")} />
                 <input className={`type ${screenType === "padaria" ? "selected" : ""}`} type={"button"} value="Padaria" onClick={() => setScreenType("padaria")} />
                 <input className={`type ${screenType === "neutro" ? "selected" : ""}`} type={"button"} value="Neutro" onClick={() => setScreenType("neutro")} />
-                <button>Criar tela</button>
+                <button disabled={buttonDisabled}>Criar tela</button>
             </form>
             <button onClick={() => setDisplayForm(!displayForm)}>Criar nova tela</button>
 
@@ -83,6 +89,7 @@ const Container = styled.div<ScreensProps>`
     .container_screens{
         display: flex;
         padding: 2rem;
+        flex-wrap: wrap;
     }
 
     .screen{
@@ -92,7 +99,7 @@ const Container = styled.div<ScreensProps>`
         display: flex;
         align-items: center;
         justify-content: center;
-        margin: 0 auto;
+        margin: 1rem auto;
     }
 
     form{
@@ -132,11 +139,16 @@ const Container = styled.div<ScreensProps>`
             padding: 0.4rem 1rem;
             font-weight: bold;
             background-color: rgb(223,41,41,0.3);
-            color:  rgb(233, 1, 1);
+            color:  rgb(250, 8, 8);
             border-radius: 8px;
             border: none;
             cursor: pointer;
 
+            &:disabled{
+                background-color:rgb(226, 210, 210);
+                color:  rgb(233, 1, 1);
+                cursor: default;
+            }
         }
     }
 

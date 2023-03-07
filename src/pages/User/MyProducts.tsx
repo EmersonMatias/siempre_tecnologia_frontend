@@ -1,4 +1,5 @@
 import axios from "axios"
+import { useState } from "react"
 import styled from "styled-components"
 import { ProductType } from "./UserScreen"
 
@@ -12,7 +13,7 @@ export type ProductType2 = {
     user_id: number
 }
 
-type a = {
+type MyProductsProps = {
     myProducts: ProductType2[],
     screen_id: number,
     ProductsId: Array<Number>,
@@ -26,10 +27,13 @@ type a = {
     }>>
 }
 
-export default function MyProducts({ myProducts, screen_id , ProductsId, settings, setSettings}: a) {
+export default function MyProducts({ myProducts, screen_id , ProductsId, settings, setSettings}: MyProductsProps) {
     const token = localStorage.getItem("token")
     const config = { headers: { Authorization: `Bearer ${token}` } }
-    
+    const [search, setSearch] = useState("")
+    const filterProducts =  myProducts.filter((product) => product?.product.includes(search.toLocaleUpperCase()))
+    console.log(ProductsId)
+
 
     function selectProduct(product: ProductType){
      
@@ -46,12 +50,13 @@ export default function MyProducts({ myProducts, screen_id , ProductsId, setting
         sendProduct()
     }
 
-
     return (
         <Container>
 
-            <div className="containers">
+        
                 <h1>Meus Produtos</h1>
+                <input type={"text"} onChange={(event) => setSearch(event.target.value)} value={search}></input>
+                <p>Numero de Produtos: {filterProducts.length ? filterProducts.length : myProducts.length}</p>
                 <div className="myProductsContainer">
                     <table>
                         <thead>
@@ -63,18 +68,29 @@ export default function MyProducts({ myProducts, screen_id , ProductsId, setting
                             </tr>
                         </thead>
                         <tbody>
-                            {myProducts?.map((product, index) => (
+                            {
+                            filterProducts?.length ?
+                            filterProducts?.map((product, index) => (
                                 <tr key={index} onClick={() => selectProduct(product)} className={`${ProductsId?.includes(product.id) ? "back" : ""}`}>
                                     <td>{product.code}</td>
                                     <td>{product.product}</td>
                                     <td>{product.type}</td>
                                     <td>R$ {(Number(product.price) / 100).toFixed(2).replace(".", ",")}</td>
-                                </tr>))}
+                                </tr>))  :
+                                     myProducts?.map((product, index) => (
+                                        <tr key={index} onClick={() => selectProduct(product)} className={`${ProductsId?.includes(product.id) ? "back" : ""}`}>
+                                            <td>{product.code}</td>
+                                            <td>{product.product}</td>
+                                            <td>{product.type}</td>
+                                            <td>R$ {(Number(product.price) / 100).toFixed(2).replace(".", ",")}</td>
+                                        </tr>))
+
+                            }
                         </tbody>
 
                     </table>
                 </div>
-            </div>
+       
         </Container>
     )
 }
@@ -82,20 +98,22 @@ export default function MyProducts({ myProducts, screen_id , ProductsId, setting
 const Container = styled.div`
     padding: 2.4rem;
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
     margin-bottom: 5rem;
 
-
-    .containers{
-        width: 100%;
-        height: 500px;
+    p{
+      margin-top: 0.8rem;
+      margin-left: 0.8rem;
     }
+
 
     .myProductsContainer{
         width: 100%;
         height: 100%;
         font-size: 1.4rem;
         overflow-y: scroll;
+        height: 400px;
     }
 
     h1{
@@ -126,4 +144,6 @@ const Container = styled.div`
         background: #000000;
         border-radius: 8px;     
     }
+
+ 
 `

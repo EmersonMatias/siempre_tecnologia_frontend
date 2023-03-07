@@ -13,8 +13,7 @@ export default function ProductsTable({ screen, Products}: PropsProductsTable) {
     const quantityLines = screen.table_lines
     const [init, setInit] = useState(0)
     const [end, setEnd] = useState(quantityLines)
-    const list: any = localStorage.getItem("list")
-    const products = Products?.slice(init, end)
+    const products = Products?.slice(init, end) 
     
 
     useEffect(() => {
@@ -24,7 +23,7 @@ export default function ProductsTable({ screen, Products}: PropsProductsTable) {
             setEnd(end + quantityLines)
 
         }, 3000)
-        console.log(interval)
+
         return () => clearInterval(interval);
 
     }, [init, quantityLines, screen.table_lines, Products])
@@ -37,7 +36,7 @@ export default function ProductsTable({ screen, Products}: PropsProductsTable) {
                 <header><p className="products">Produtos</p><p className="prices">Preços</p></header>
                 <div className="table">
                     <div className="products">
-                        {products?.map((e, index) => (<div className="product" onClick={() => alert(`clicou em ${e.product}`)}><p>{e.product}{index}</p><p>R$ {(e.price/100).toFixed(2).replace(".", ",")}</p></div>))}
+                        { products?.map((e, index) => (<div className="product" onClick={() => alert(`clicou em ${e.product}`)}><p>{e.product}{index}</p><p>R$ {(e.price/100).toFixed(2).replace(".", ",")}</p></div>))}
                     </div>
                 </div>
             </div>

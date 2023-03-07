@@ -1,12 +1,11 @@
 import { useState } from "react";
 import styled from "styled-components"
 import Close from "../../img/iconClose.svg"
-import { Screen } from "../../types/types";
+import { ProductScreen, Screen } from "../../types/types";
 import MyProducts, { ProductType2 } from "../User/MyProducts";
 import UploadFiles from "../User/UploadFiles";
-import { Change } from "./functionsSettings";
-
-
+import { Change, UpdateScreen } from "./functionsSettings";
+import ProductsSelected from "./ProductsSelected";
 
 type PropsProductsTable = {
     settings: {
@@ -21,9 +20,10 @@ type PropsProductsTable = {
     setScreen: React.Dispatch<React.SetStateAction<Screen>>
     myProducts: ProductType2[]
     ProductsId: Array<Number>
+    myProductsScreen: ProductScreen[]
 }
 
-export default function Settings({ settings, setSettings, screen, setScreen, myProducts, ProductsId }: PropsProductsTable) {
+export default function Settings({ settings, setSettings, screen, setScreen, myProducts, ProductsId, myProductsScreen }: PropsProductsTable) {
     const [a, setA] = useState({ x: 0, y: 0 })
 
     function handleDragEnd(event: any) {
@@ -47,24 +47,24 @@ export default function Settings({ settings, setSettings, screen, setScreen, myP
             <div className="configLayoutContainer">
                 <div>
                     Exibir Contador:
-                    <button className="counter" onClick={() => Change.ShowCounter(screen, setScreen)}>
+                    <button className="counter toogleButton" onClick={() => Change.ShowCounter(screen, setScreen)}>
                         {screen.show_counter === true ? "Ativado" : "Desativado"}
                     </button>
                 </div>
                 <div>
                     Exibir Tabela de Produtos: 
-                    <button className="productsTable" onClick={() => Change.ShowProductTable(screen, setScreen)}>
+                    <button className="productsTable toogleButton" onClick={() => Change.ShowProductTable(screen, setScreen)}>
                         {screen.show_productstable === true ? "Ativado" : "Desativado"}
                     </button>
                 </div>
                 <div>
                     Exibir Banner:
-                    <button className="banner" onClick={() => Change.ShowBanner(screen, setScreen)}>
+                    <button className="banner toogleButton" onClick={() => Change.ShowBanner(screen, setScreen)}>
                         {screen.show_banner === true ? "Ativado" : "Desativado"}
                     </button>
                 </div>
                 <div>
-                    Tempo entre banners:
+                    Tempo entre banners: 
                     <input type={"number"} min={1} onChange={(event) => {Change.BannerTime(event, screen, setScreen)}} value={screen.banner_time/1000}/>
 
                 </div>
@@ -122,9 +122,9 @@ export default function Settings({ settings, setSettings, screen, setScreen, myP
                     <option value="'Lilita One', cursive">Lilita One</option>
                 </select>
                 <div className="color_lines">
-                    Cor das linhas:
+                    Cor das linhas aqui:
                     <input onChange={(event) => Change.Color(event, screen, setScreen) } type={"color"}  />
-                    <button onClick={(event) => Change.NoColor(event, screen, setScreen)}>Sem Cor</button>
+                    <button onClick={() => Change.NoColor(screen, setScreen)}>Sem Cor</button>
                 </div>
                 <div>Largura da Tabela de Produtos:
                     <input onChange={(event) =>Change.WidthProductTable(event, screen, setScreen)} type={"number"} min={50} max={100} value={screen.width_table} />
@@ -135,9 +135,15 @@ export default function Settings({ settings, setSettings, screen, setScreen, myP
                 </div>
             </div>
 
+            <div>
+                <button className="save" onClick={() => UpdateScreen(screen)}>Salvar</button>
+            </div>
+
             <UploadFiles screen_id={screen.id} />
 
             <MyProducts myProducts={myProducts} screen_id={screen.id} ProductsId={ProductsId} settings={settings} setSettings={setSettings}/>
+
+            <ProductsSelected myProductsScreen={myProductsScreen}/>
 
         </Container>
     )
@@ -176,11 +182,25 @@ const Container = styled.div<Props>`
         cursor: pointer;
     }
 
+    div{
+        margin: 1rem 0;
+    }
+
     input{
         border-radius: 8px;
         font-size: 1rem;
         font-weight: bold;
         padding-left: 10px;
+        margin-left: 1rem;
+        margin-right: 1rem;
+    }
+
+    button{
+        margin: 0 0.5rem;
+        background-color: #FFFFFF;
+        font-weight: bold;
+        font-size: 1rem;
+        border-radius: 8px;
     }
 
     .close{
@@ -201,15 +221,15 @@ const Container = styled.div<Props>`
     .configLayoutContainer, .configProductsTable, .configTitleTable{
         margin-top: 2rem;
         width: 80%;
+
+        
     }
 
     .numberLines, .spaceLines{
         margin-bottom: 1rem;
     }
 
-
-
-    .counter, .productsTable, .banner{
+    .toogleButton{
         border: none;
         font-size: 1rem;
         color: white;
@@ -229,6 +249,15 @@ const Container = styled.div<Props>`
 
     .banner{
         background-color: ${props => props.screen.show_banner === true ? "green" : "red"};
+    }
+
+    .save{
+        background-color: #f57474;
+        color: #FFFFFF;
+        font-size: 1.6rem;
+        border: none;
+        padding: 0.8rem;
+        cursor: pointer;
     }
 `
 

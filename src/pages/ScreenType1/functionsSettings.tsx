@@ -1,4 +1,8 @@
+import axios from "axios"
 import { Screen } from "../../types/types"
+
+const token = localStorage.getItem("token")
+const config = { headers: { Authorization: `Bearer ${token}` } }
 
 
 //POSITION PRODUCT
@@ -59,8 +63,8 @@ function Color(e: React.ChangeEvent<HTMLInputElement>, screen: Screen, setScreen
     setScreen({ ...screen, color_lines: e.target.value })
 }
 
-function NoColor(e: React.MouseEvent<HTMLButtonElement, MouseEvent>, screen: Screen, setScreen: React.Dispatch<React.SetStateAction<Screen>>){
-    setScreen({ ...screen, color_lines: "" })
+function NoColor(screen: Screen, setScreen: React.Dispatch<React.SetStateAction<Screen>>){
+    setScreen({ ...screen, color_lines: " " })
 }
 
 function WidthProductTable(e:React.ChangeEvent<HTMLInputElement>, screen: Screen, setScreen: React.Dispatch<React.SetStateAction<Screen>>){
@@ -84,7 +88,7 @@ function BackgroundColorTitle(e: React.ChangeEvent<HTMLInputElement>, screen: Sc
 }
 
 function BackgroundColorTitleNone(screen: Screen, setScreen: React.Dispatch<React.SetStateAction<Screen>> ){
-    setScreen({ ...screen, background_color_title: "" })
+    setScreen({ ...screen, background_color_title: "  " })
 }
 
 function FontFamilyTitle(e: React.ChangeEvent<HTMLSelectElement> ,screen: Screen, setScreen: React.Dispatch<React.SetStateAction<Screen>>){
@@ -101,6 +105,23 @@ function ColorTitle(e: React.ChangeEvent<HTMLInputElement>, screen: Screen, setS
 
 function BannerTime(e: React.ChangeEvent<HTMLInputElement> ,screen: Screen, setScreen: React.Dispatch<React.SetStateAction<Screen>>){
     setScreen({ ...screen, banner_time: Number(e.target.value)*1000 })
+}
+
+export async function UpdateScreen(screen: Screen){
+    const sendContent = async () =>{
+
+        try{
+           const sucess = await axios.put(`http://localhost:4000/screen/${screen.id}`, {screen} , config)
+           alert("Atulizado com sucesso")
+           console.log(sucess)
+        }catch(error){
+            console.log(error)
+        }
+    
+    }
+
+    sendContent()
+    
 }
 
 

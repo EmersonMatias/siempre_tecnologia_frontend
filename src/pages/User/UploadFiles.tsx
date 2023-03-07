@@ -2,6 +2,7 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import styled from "styled-components"
 import MyContext from "../../context/context";
+import { DeleteFile } from "./functionsUser";
 
 
 type FileType = {
@@ -85,7 +86,14 @@ export default function UploadFiles({ screen_id }: UploadFiles) {
             </form>
             <h1>Meus Arquivos</h1>
             <div className="files">
-                {myFiles?.map((file, index) => (<img key={index} src={`${file.url}`} />))}
+                {myFiles?.map((file, index) => (
+                    file.file_name.includes("mp4") ?
+                    <video  controls onClick={() => DeleteFile(file.id)}>
+                        <source src={file.url} type="video/mp4" ></source>
+                    </video> 
+                : 
+                    <img key={index} src={`${file.url}`} onClick={() => DeleteFile(file.id)} />
+                ))}
             </div>
         </Container>
     )
@@ -136,13 +144,18 @@ const Container = styled.div`
         overflow-y: scroll;
         background-color: #ffffff;
 
-        img{
+        img, video {
             height: 200px;
             margin-left: 2rem;
             margin-bottom: 2rem;
             border-radius: 16px;
             background-color: rgb(255,255,255,1);
         }
+
+        video{
+            width: 300px;
+        }
+        
     }
 
 `

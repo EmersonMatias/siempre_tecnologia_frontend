@@ -67,11 +67,7 @@ export default function UserScreen() {
 
 
             <div className="configContainer">
-
-             
-           
                 <Screens />
-
             </div>
         </Container>
     )
@@ -112,6 +108,7 @@ const Container = styled.div`
 
     .configContainer{
         width: 100%;
+        display: flex;
     }
 
 `

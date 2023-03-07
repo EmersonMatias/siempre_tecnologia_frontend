@@ -18,9 +18,7 @@ export default function SideBar({ password, screen }: PropsSideBar) {
     const [currentSlide, setCurrentSlide] = useState(0)
     let time = screen.banner_time
     const [autoplayInterval, setApi] = useState(time)
-    console.log(currentSlide, files)
-    console.log(autoplayInterval)
-    console.log(time)
+
     const listaNova = files.reduce((acc:any, curr, index) => {
         if (index !== 0) {
             const novoElemento = {
@@ -31,7 +29,7 @@ export default function SideBar({ password, screen }: PropsSideBar) {
         acc.push(curr);
         return acc;
       }, []);
-console.log(listaNova, "aa")
+
     useEffect(() => {
         const getFiles = async () => {
             try{

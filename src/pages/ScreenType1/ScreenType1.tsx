@@ -14,6 +14,7 @@ import { ProductType2 } from "../User/MyProducts"
 
 export default function ScreenType1() {
     const [password, setPassword] = useState(0)
+    const [passworDigit, setPasswordDigit] = useState("")
     const [screen, setScreen] = useState<Screen>({
         background_url: "",
         font_family: "",
@@ -24,9 +25,9 @@ export default function ScreenType1() {
         show_counter: true,
         show_productstable: true,
         space_lines: 0,
-        table_lines: 1,
+        table_lines: 5,
         user_id: 0,
-        color_lines: "",
+        color_lines: "  ",
         width_table: 0,
         price_position: "",
         product_position: "",
@@ -49,19 +50,37 @@ export default function ScreenType1() {
     const Products: ProductType[] = myProductsScreen.map((product) => product?.products)
     const active = localStorage.getItem("active")
     const navigate = useNavigate()
+    console.log(myProductsScreen)
 
-    function passwordConfigs() {
-        setPassword(password + 1)
+    function passwordConfigs(event: React.KeyboardEvent<HTMLDivElement>) {
+        if(event.key === "Enter"){
+            if(passworDigit.length){
+                setPasswordDigit("")
+                return setPassword(Number(passworDigit))
+            }
 
-        if ('speechSynthesis' in window) {
-            const utterance = new SpeechSynthesisUtterance();
-            utterance.text = `Senha ${password + 1}. repetindo.senha ${password + 1}`;
-            utterance.lang = 'pt-BR';
-            utterance.rate = 1.2;
-            utterance.pitch = 1;
-            utterance.volume = 1;
-            speechSynthesis.speak(utterance);
+            setPassword(password + 1)
+
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance();
+                utterance.text = `Senha ${password + 1}. repetindo.senha ${password + 1}`;
+                utterance.lang = 'pt-BR';
+                utterance.rate = 1.2;
+                utterance.pitch = 1;
+                utterance.volume = 1;
+                speechSynthesis.speak(utterance);
+            }
         }
+
+        if(!isNaN(Number(event.key))){
+            setPasswordDigit(passworDigit+event.key)
+            console.log(passworDigit)
+        }
+
+        if(event.key === "Escape"){
+            setPasswordDigit("")
+        }
+
     }
  
     useEffect(() => {
@@ -99,11 +118,20 @@ export default function ScreenType1() {
     }, [settings.update])
 
     return (
-        <Container onKeyDown={(event) => event.key === "Enter" ? passwordConfigs() : ""} tabIndex={0}>
-            <Settings settings={settings} setSettings={setSettings} screen={screen} setScreen={setScreen} myProducts={myProducts} ProductsId={ProductsId} />
+        <Container onKeyDown={(event) =>  passwordConfigs(event)} tabIndex={0}>
+            <Settings 
+                settings={settings} 
+                setSettings={setSettings}
+                screen={screen} setScreen={setScreen} 
+                myProducts={myProducts} 
+                ProductsId={ProductsId} 
+                myProductsScreen={myProductsScreen} 
+            />
+
             <SideBar password={password} screen={screen} />
             <ProductsTable screen={screen} Products={Products} />
             <img className="settings" src={iconSetting} onClick={() => setSettings({ ...settings, settingVisible: true })} />
+            <div className="backPage" onClick={() =>navigate("/user")}>Voltar</div>
         </Container>
     )
 }
@@ -117,6 +145,20 @@ const Container = styled.div`
     overflow: hidden;
     position: relative;
     
+    .backPage{
+        font-size: 1.6rem;
+        font-weight: bold;
+        position: fixed;
+        right: 16px;
+        top: 8px;
+        opacity: 0;
+
+        &:hover{
+            opacity: 1;
+        }
+    }
+
+
  
     .settings{
         width: 60px;
