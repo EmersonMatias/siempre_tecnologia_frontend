@@ -172,6 +172,29 @@ export default function AdminScreen() {
             updatePrice()
         }
     }
+
+    function deleteUser( userId: number){
+
+        const confirmDelete = confirm("Tem certeza que deseja deletar essa conta?")
+
+        if(confirmDelete){
+            const deleteAccount = async () => {
+            
+                try{
+                   const sucess = await axios.delete(`http://localhost:4000/deleteuser/${userId}`, config)
+                   setUpdatePage(!updatePage)
+                   console.log(sucess)
+               }catch(error){
+                   console.log(error)
+               }
+           }
+       
+            deleteAccount()
+        }
+
+    }
+
+    
     
     
 
@@ -181,7 +204,6 @@ export default function AdminScreen() {
             <div className="exit" onClick={() => exitAccount()}>
                 Sair
             </div>
-            <p>Numero de Produtos: {""}</p>
             <input type={"text"} onChange={(event) => setSearch(event.target.value)} value={search} className="search"></input>
             <div className="tableContent">
                 <table>
@@ -202,7 +224,7 @@ export default function AdminScreen() {
                         { filterProducts.length ?
                              filterProducts.map((e, index) => (
                                 <tr key={index}>
-                                    <td>{e.id}</td>
+                                    <td onClick={() => deleteUser(e.id) }>{e.id}</td>
                                     <td onClick={() => updateUserName(e.id) }>{e.name}</td>
                                     <td>{e.email}</td>
                                     <td onClick={() => updateUserPhone(e.id) }>{e.phone}</td>
@@ -249,6 +271,7 @@ const Container = styled.div`
 
     .search{
         width: 50%;
+        margin-top: 1rem;
     }
 
     .newUser{

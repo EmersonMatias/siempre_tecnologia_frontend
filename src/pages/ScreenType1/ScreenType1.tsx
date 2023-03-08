@@ -47,13 +47,14 @@ export default function ScreenType1() {
     const [myProducts, setMyProducts] = useState<ProductType2[]>([])
     const [myProductsScreen, setMyProductsScreen] = useState<ProductScreen[]>([])
     const ProductsId: Number[] = myProductsScreen.map((product) => (product?.product_id))
-    const Products: ProductType[] = myProductsScreen.map((product) => product?.products)
+    const Products = myProductsScreen.map((product) => product?.products)
     const active = localStorage.getItem("active")
     const navigate = useNavigate()
     console.log(myProductsScreen)
 
     function passwordConfigs(event: React.KeyboardEvent<HTMLDivElement>) {
         if(event.key === "Enter"){
+            
             if(passworDigit.length){
                 setPasswordDigit("")
                 return setPassword(Number(passworDigit))
@@ -63,9 +64,9 @@ export default function ScreenType1() {
 
             if ('speechSynthesis' in window) {
                 const utterance = new SpeechSynthesisUtterance();
-                utterance.text = `Senha ${password + 1}. repetindo.senha ${password + 1}`;
+                utterance.text = `Senha ${password + 1}. Repetindo, senha ${password + 1}`;
                 utterance.lang = 'pt-BR';
-                utterance.rate = 1.2;
+                utterance.rate = 1;
                 utterance.pitch = 1;
                 utterance.volume = 1;
                 speechSynthesis.speak(utterance);

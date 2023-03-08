@@ -1,3 +1,4 @@
+import { ProductType2 } from "../pages/User/MyProducts"
 import { ProductType } from "../pages/User/UserScreen"
 
 export type UserData = {
@@ -46,7 +47,7 @@ export type Screen = {
 export type ProductScreen = {
     id: number,
     product_id: number,
-    products: ProductType,
+    products: ProductType2,
     screen_id: number,
     user_id: number
 

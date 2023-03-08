@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom"
 import styled from "styled-components"
 import MyContext from "../../context/context"
 import BlockPage from "../Block/BlockPage"
-import { ProductType2 } from "./MyProducts"
 import Screens from "./Screens"
 
 
@@ -16,6 +15,16 @@ export type ProductType = {
     price: number,
     user_id: number
 }
+
+export type ProductType2 = {
+    id: number
+    code: number,
+    type: string,
+    product: string,
+    price: number,
+    user_id: number
+}
+
 
 export default function UserScreen() {
     const { userData, setUserData, config } = useContext(MyContext)

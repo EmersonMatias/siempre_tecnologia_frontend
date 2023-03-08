@@ -1,20 +1,25 @@
+import axios from "axios"
 import { useEffect, useState } from "react"
 import styled from "styled-components"
 import { Screen } from "../../types/types"
-import { ProductType } from "../User/UserScreen"
+import { ProductType, ProductType2 } from "../User/UserScreen"
+import promo2 from "../../img/promo.png"
+import { useParams } from "react-router-dom"
+
 type PropsProductsTable = {
     screen: Screen,
-    Products: ProductType[]
+    Products: ProductType2[]
 }
-
-
 
 export default function ProductsTable({ screen, Products}: PropsProductsTable) {
     const quantityLines = screen.table_lines
     const [init, setInit] = useState(0)
     const [end, setEnd] = useState(quantityLines)
     const products = Products?.slice(init, end) 
-    
+    const token = localStorage.getItem("token")
+    const config = { headers: { Authorization: `Bearer ${token}` } }
+    const screen_id = useParams().id
+    const [promotionalProducts, setPromotionalProducts] = useState<any>([])
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -28,6 +33,38 @@ export default function ProductsTable({ screen, Products}: PropsProductsTable) {
 
     }, [init, quantityLines, screen.table_lines, Products])
 
+    useEffect(() => {
+        const getPromotionalProducts =  async() => {
+
+            try{
+                const sucess = await axios.get(`http://localhost:4000/promotionalproducts/${screen_id}`, config)
+                setPromotionalProducts(sucess.data.map((product: any) => product?.product_id ))
+            }catch(error){
+                console.log(error)
+            }
+        }
+
+        getPromotionalProducts()
+    }, [])
+
+   type ProductType2 = {
+        id: number
+        code: number,
+        type: string,
+        product: string,
+        price: number,
+        user_id: number
+    }
+
+    async function promotionalLine(event:React.MouseEvent<HTMLDivElement, MouseEvent>, e: ProductType2){
+        try{
+            const sucess = await axios.post("http://localhost:4000/promotionalproducts",{product_id: e?.id ,screen_id}, config)
+            console.log(sucess)
+        }catch(error){
+            console.log(error)
+        }
+
+    }
  
     return (
         <Container screen={screen} Products={Products}>
@@ -36,10 +73,18 @@ export default function ProductsTable({ screen, Products}: PropsProductsTable) {
                 <header><p className="products">Produtos</p><p className="prices">Preços</p></header>
                 <div className="table">
                     <div className="products">
-                        { products?.map((e, index) => (<div className="product" onClick={() => alert(`clicou em ${e.product}`)}><p>{e.product}{index}</p><p>R$ {(e.price/100).toFixed(2).replace(".", ",")}</p></div>))}
+                        { products?.map((e, index) => (
+                            <div className="product" onClick={(event) => promotionalLine(event, e)}>
+                                {promotionalProducts.includes(e.id) ? <div className="promotional" ><img src={promo2}/></div> : ""}
+                                <p>{e.product}{index}</p>
+                                <p>R$ {(e.price/100).toFixed(2).replace(".", ",")}</p>
+                            </div>))
+                        }
                     </div>
                 </div>
             </div>
+
+            <img className="imgLogo" src="https://upload.wikimedia.org/wikipedia/commons/a/ab/Android_O_Preview_Logo.png"></img>
         </Container>
     )
 }
@@ -56,6 +101,14 @@ const Container = styled.div<PropsProductsTable>`
         position: relative;
         font-family: ${props => props.screen.font_family};
     
+        .imgLogo{
+            height: 50%;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 1;
+        }
 
         header{
             display: flex;
@@ -81,6 +134,9 @@ const Container = styled.div<PropsProductsTable>`
             }
         }
 
+        .gradient{
+            z-index: 200;
+        }
         .table{
             display: flex;
             justify-content: space-between;
@@ -101,12 +157,29 @@ const Container = styled.div<PropsProductsTable>`
 
                 .product{
                     display: flex;
+                    position: relative;
                     justify-content: space-between;
                     padding-right: 1rem;
                     margin-bottom: ${props => props.screen.space_lines}rem;
                     z-index: 500;
                     background-color: ${props => props.screen.color_lines};
                 }
+            }
+        }
+
+        .promotion{
+            color: blue;
+        }
+
+        .promotional{
+            display: flex;
+            position: absolute;
+            right: 200px;
+            top: -55px;
+      
+
+            img{
+                height: 140px;
             }
         }
      

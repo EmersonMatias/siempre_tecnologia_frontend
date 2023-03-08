@@ -86,7 +86,7 @@ function baerna(){
     return (
         <Container screen={screen} password={password}>
 
-            <div className="banner"> { baerna() }</div>
+            <div className="banner"> { baerna() }</div>/
 
             <div className="password">
                 <p>SENHA:</p>
