@@ -23,7 +23,7 @@ export default function AdminScreen() {
 
         async function getUsers() {
             try {
-                const users = await axios.get("http://localhost:4000/users", config)
+                const users = await axios.get("https://siempre-tecnologia-backend-5obk.onrender.com/users", config)
                 setUsers(users.data)
             } catch (error) {
                 console.log(error)
@@ -40,7 +40,7 @@ export default function AdminScreen() {
             const dataUpdate = { active: false, userId: e.id }
 
             setDesactiveButton(true)
-            const update = await axios.put("http://localhost:4000/updateuser", dataUpdate, config)
+            const update = await axios.put("https://siempre-tecnologia-backend-5obk.onrender.com/updateuser", dataUpdate, config)
 
             setUpdatePage(!updatePage)
 
@@ -49,7 +49,7 @@ export default function AdminScreen() {
         if (e.active === false) {
             const dataUpdate = { active: true, userId: e.id }
             setDesactiveButton(true)
-            const update = await axios.put("http://localhost:4000/updateuser", dataUpdate, config)
+            const update = await axios.put("https://siempre-tecnologia-backend-5obk.onrender.com/updateuser", dataUpdate, config)
             setUpdatePage(!updatePage)
 
             setDesactiveButton(false)
@@ -80,7 +80,7 @@ export default function AdminScreen() {
             const updateName = async () => {
             
                 try{
-                    const sucess = await axios.put("http://localhost:4000/updateusername", {name: newName, userId}, config)
+                    const sucess = await axios.put("https://siempre-tecnologia-backend-5obk.onrender.com/updateusername", {name: newName, userId}, config)
                     setUpdatePage(!updatePage)
                     console.log(sucess)
                 }catch(error){
@@ -101,7 +101,7 @@ export default function AdminScreen() {
             const updatePhone = async () => {
             
                 try{
-                    const sucess = await axios.put("http://localhost:4000/updateuserphone", {phone: newPhone, userId}, config)
+                    const sucess = await axios.put("https://siempre-tecnologia-backend-5obk.onrender.com/updateuserphone", {phone: newPhone, userId}, config)
                     setUpdatePage(!updatePage)
                     console.log(sucess)
                 }catch(error){
@@ -121,7 +121,7 @@ export default function AdminScreen() {
             const updateCity = async () => {
             
                 try{
-                    const sucess = await axios.put("http://localhost:4000/updateusercity", {city: newCity, userId}, config)
+                    const sucess = await axios.put("https://siempre-tecnologia-backend-5obk.onrender.com/updateusercity", {city: newCity, userId}, config)
                     setUpdatePage(!updatePage)
                     console.log(sucess)
                 }catch(error){
@@ -141,7 +141,7 @@ export default function AdminScreen() {
             const updateAdress = async () => {
             
                 try{
-                    const sucess = await axios.put("http://localhost:4000/updateuseradress", {adress: newAdress, userId}, config)
+                    const sucess = await axios.put("https://siempre-tecnologia-backend-5obk.onrender.com/updateuseradress", {adress: newAdress, userId}, config)
                     setUpdatePage(!updatePage)
                     console.log(sucess)
                 }catch(error){
@@ -161,7 +161,7 @@ export default function AdminScreen() {
             const updatePrice = async () => {
             
                 try{
-                    const sucess = await axios.put("http://localhost:4000/updateuserprice", {price: Number(newPrice)*100, userId}, config)
+                    const sucess = await axios.put("https://siempre-tecnologia-backend-5obk.onrender.com/updateuserprice", {price: Number(newPrice)*100, userId}, config)
                     setUpdatePage(!updatePage)
                     console.log(sucess)
                 }catch(error){
@@ -181,7 +181,7 @@ export default function AdminScreen() {
             const deleteAccount = async () => {
             
                 try{
-                   const sucess = await axios.delete(`http://localhost:4000/deleteuser/${userId}`, config)
+                   const sucess = await axios.delete(`https://siempre-tecnologia-backend-5obk.onrender.com/deleteuser/${userId}`, config)
                    setUpdatePage(!updatePage)
                    console.log(sucess)
                }catch(error){

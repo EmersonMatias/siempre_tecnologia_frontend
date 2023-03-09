@@ -111,7 +111,7 @@ export async function UpdateScreen(screen: Screen){
     const sendContent = async () =>{
 
         try{
-           const sucess = await axios.put(`http://localhost:4000/screen/${screen.id}`, {screen} , config)
+           const sucess = await axios.put(`https://siempre-tecnologia-backend-5obk.onrender.com/screen/${screen.id}`, {screen} , config)
            alert("Atulizado com sucesso")
            console.log(sucess)
         }catch(error){

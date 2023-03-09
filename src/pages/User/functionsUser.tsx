@@ -10,7 +10,7 @@ export async function DeleteFile(id: number){
     if(confirmDelete){
         const deleteFile = async  () => {
             try{
-                const sucess = await axios.delete(`http://localhost:4000/deletefile/${id}`, config)
+                const sucess = await axios.delete(`https://siempre-tecnologia-backend-5obk.onrender.com/deletefile/${id}`, config)
                 alert("Arquivo excluido com sucesso!")
             }catch(error){
                 console.log(error)

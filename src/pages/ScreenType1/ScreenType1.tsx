@@ -91,7 +91,7 @@ export default function ScreenType1() {
 
         const screens = async () => {
             try {
-                const sucess = await axios.get(`http://localhost:4000/screen/${screen_id}`, config)
+                const sucess = await axios.get(`https://siempre-tecnologia-backend-5obk.onrender.com/screen/${screen_id}`, config)
                 setScreen(sucess?.data)
             } catch (error) {
                 console.log(error)
@@ -100,7 +100,7 @@ export default function ScreenType1() {
         screens()
         const getProducts = async () => {
             try {
-                const productsList = await axios.get("http://localhost:4000/products", config)
+                const productsList = await axios.get("https://siempre-tecnologia-backend-5obk.onrender.com/products", config)
                 setMyProducts(productsList.data)
             } catch (error) {
                 console.log(error)
@@ -109,7 +109,7 @@ export default function ScreenType1() {
         getProducts()
         const getProductsScreen = async() => {
             try{
-                const sucess = await axios.get(`http://localhost:4000/productsscreen/${screen_id}`, config)
+                const sucess = await axios.get(`https://siempre-tecnologia-backend-5obk.onrender.com/productsscreen/${screen_id}`, config)
                 setMyProductsScreen(sucess.data)
             }catch(error){
                 console.log(error)
@@ -153,6 +153,8 @@ const Container = styled.div`
         right: 16px;
         top: 8px;
         opacity: 0;
+        z-index: 10000;
+     
 
         &:hover{
             opacity: 1;

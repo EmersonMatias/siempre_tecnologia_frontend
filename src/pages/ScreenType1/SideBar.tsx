@@ -33,7 +33,7 @@ export default function SideBar({ password, screen }: PropsSideBar) {
     useEffect(() => {
         const getFiles = async () => {
             try{
-                const sucess = await  axios.get(`http://localhost:4000/getfiles/${screen_id}`,config )
+                const sucess = await  axios.get(`https://siempre-tecnologia-backend-5obk.onrender.com/getfiles/${screen_id}`,config )
                 setFiles(sucess.data)
            
             }catch(error){
@@ -77,7 +77,7 @@ function baerna(){
        return  <img src={listaNova[currentSlide]?.url} className="active"></img>
     }
     else if (listaNova[currentSlide]?.original_name?.includes('mp4')){
-        return <video autoPlay={true} onLoadedMetadata={(e) => setApi(Number(e.target.duration)*1000)} className="active" >
+        return <video autoPlay={true} onLoadedMetadata={(e) =>   setApi(Number((e.target as HTMLVideoElement)?.duration) * 1000)} className="active" >
                     <source src={listaNova[currentSlide]?.url} type="video/mp4" ></source>
                 </video> 
     }
@@ -86,7 +86,7 @@ function baerna(){
     return (
         <Container screen={screen} password={password}>
 
-            <div className="banner"> { baerna() }</div>/
+            <div className="banner"> { baerna() }</div>
 
             <div className="password">
                 <p>SENHA:</p>

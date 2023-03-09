@@ -28,7 +28,7 @@ export default function CreateNewUser({updatePage, setUpdatePage, showCreateUser
         event.preventDefault()
 
         try{
-            const sucess = await axios.post("http://localhost:4000/cadastrar", newUserData, config)
+            const sucess = await axios.post("https://siempre-tecnologia-backend-5obk.onrender.com/cadastrar", newUserData, config)
             alert("Conta criada com sucesso!")
             setNewUserData({name: "", email: "",password: "", phone: "", city: "", adress: "", price: 0})
             setUpdatePage(!updatePage)

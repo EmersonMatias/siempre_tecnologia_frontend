@@ -40,7 +40,7 @@ export default function UserScreen() {
 
         const getProducts = async () => {
             try {
-                const productsList = await axios.get("http://localhost:4000/products", config)
+                const productsList = await axios.get("https://siempre-tecnologia-backend-5obk.onrender.com/products", config)
                 console.log(productsList.data, "aaaaaaaaaaaa")
                 setMyProducts(productsList.data)
             } catch (error) {

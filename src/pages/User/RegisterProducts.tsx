@@ -38,7 +38,7 @@ export default function RegisterProducts() {
 
         try {
             setDisabled(true)
-            const sucess = await axios.post("http://localhost:4000/products", productsList, config)
+            const sucess = await axios.post("https://siempre-tecnologia-backend-5obk.onrender.com/products", productsList, config)
             setDisabled(false)
             console.log(sucess)
         } catch (error) {

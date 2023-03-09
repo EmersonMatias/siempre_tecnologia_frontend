@@ -39,7 +39,7 @@ export default function MyProducts({ myProducts, screen_id , ProductsId, setting
      
         const sendProduct = async () => {
             try{
-               const sucess = await axios.post(`http://localhost:4000/productsscreen/${screen_id}`, product, config)
+               const sucess = await axios.post(`https://siempre-tecnologia-backend-5obk.onrender.com/productsscreen/${screen_id}`, product, config)
                 console.log(sucess)
                 setSettings({...settings, update: !settings.update})
             }catch(error){

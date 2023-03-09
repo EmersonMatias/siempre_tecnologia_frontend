@@ -43,7 +43,7 @@ export default function UploadFiles({ screen_id }: UploadFiles) {
             formData.append('file', file);
             setDisableButton(true)
             console.log(screen_id, "bbb")
-            axios.post(`http://localhost:4000/uploadfile/${screenId}`, formData, config)
+            axios.post(`https://siempre-tecnologia-backend-5obk.onrender.com/uploadfile/${screenId}`, formData, config)
                 .then((response) => {
                     setDisableButton(false)
                     setFile(null)
@@ -61,7 +61,7 @@ export default function UploadFiles({ screen_id }: UploadFiles) {
         const getFiles = async () => {
             if (screenId) {
                 try {
-                    const sucess = await axios.get(`http://localhost:4000/getfiles/${screen_id}`, config)
+                    const sucess = await axios.get(`https://siempre-tecnologia-backend-5obk.onrender.com/getfiles/${screen_id}`, config)
                     setMyFiles(sucess.data)
                 } catch (error) {
                     console.log(error)

@@ -22,7 +22,7 @@ export default function Screens() {
            setButtoDisabled(true)
             try {
 
-                const sucess = await axios.post("http://localhost:4000/screens", { screen_name: screenName, screen_type: screenType }, config)
+                const sucess = await axios.post("https://siempre-tecnologia-backend-5obk.onrender.com/screens", { screen_name: screenName, screen_type: screenType }, config)
                 setDisplayForm(false)
                 setButtoDisabled(false)
                 setScreenName("")
@@ -39,7 +39,7 @@ export default function Screens() {
     useEffect(() => {
         const screens = async () => {
             try {
-                const sucess = await axios.get("http://localhost:4000/screens", config)
+                const sucess = await axios.get("https://siempre-tecnologia-backend-5obk.onrender.com/screens", config)
                 setScreens(sucess?.data)
             } catch (error) {
                 console.log(error)
