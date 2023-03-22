@@ -4,10 +4,9 @@ import { useNavigate } from "react-router-dom"
 import styled from "styled-components"
 import MyContext from "../../context/context"
 import BlockPage from "../Block/BlockPage"
+import { exitAccount, getProducts } from "./functionsUser"
 import { ProductType2 } from "./MyProducts"
 import Screens from "./Screens"
-
-
 
 export type ProductType = {
     code: number,
@@ -19,7 +18,7 @@ export type ProductType = {
 
 export default function UserScreen() {
     const { userData, setUserData, config } = useContext(MyContext)
-    const [updatePage, setUpdatePage] = useState(false)
+    const [updatePage, setUpdatePage] = useState<boolean>(false)
     const navigate = useNavigate()
     const active = localStorage.getItem("active")
     const [myProducts, setMyProducts] = useState<ProductType2[]>([])
@@ -28,54 +27,32 @@ export default function UserScreen() {
         if (userData?.account_type === "admin") return navigate("/")
         if (userData.token === "") return navigate("/")
 
-
-        const getProducts = async () => {
-            try {
-                const productsList = await axios.get("https://siempre-tecnologia-backend-5obk.onrender.com/products", config)
-                console.log(productsList.data, "aaaaaaaaaaaa")
-                setMyProducts(productsList.data)
-            } catch (error) {
-                console.log(error)
-            }
-        }
-        getProducts()
+        getProducts(setMyProducts)
     }, [updatePage])
 
-    function exitAccount() {
-        localStorage.removeItem("token")
-        localStorage.removeItem("account_type")
-        localStorage.removeItem("name")
-        localStorage.removeItem("active")
-        localStorage.removeItem("id")
-        setUserData({
-            account_type: "user",
-            active: false,
-            name: "",
-            token: "",
-            id: 0
-        })
-        setUpdatePage(!updatePage)
-    }
+
 
     return (
         <Container >
-            {active === "true" ? null : <BlockPage/>}
-            <header><h1>Tabela de Configurações</h1>    <div className="exit" onClick={() => exitAccount()}>
-                Sair
-            </div></header>
+            {active === "true" ? null : <BlockPage />}
 
-
+            <header>
+                <h1>Tabela de Configurações</h1>
+                <div className="exit" onClick={() => exitAccount(setUserData, setUpdatePage, updatePage)}>
+                    Sair
+                </div>
+            </header>
 
             <div className="configContainer">
-                <Screens />
+                <Screens updatePage={updatePage} setUpdatePage={setUpdatePage} />
             </div>
         </Container>
     )
 }
 
 const Container = styled.div`
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     font-size: 2rem;
     overflow-wrap: break-word;
     overflow-x: hidden;

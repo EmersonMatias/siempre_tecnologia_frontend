@@ -4,7 +4,7 @@ import { UserData, UserDataGet } from "../types/types";
 
   type MyContextState = {
     userData: UserData,
-    setUserData: React.Dispatch<React.SetStateAction<UserDataGet>>,
+    setUserData: React.Dispatch<React.SetStateAction<UserData>>,
     config: object,
   }
   

@@ -4,8 +4,14 @@ import styled from "styled-components"
 import MyContext from "../../context/context"
 import { useNavigate } from "react-router-dom"
 import { Screen } from "../../types/types"
+import { createNewScreen } from "./functionsUser"
 
-export default function Screens() {
+type PropsScreen = {
+    updatePage: boolean,
+    setUpdatePage:  React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export default function Screens({updatePage, setUpdatePage}: PropsScreen ) {
     const { config } = useContext(MyContext)
     const [displayForm, setDisplayForm] = useState(false)
     const [screenName, setScreenName] = useState("")
@@ -14,27 +20,6 @@ export default function Screens() {
     const [buttonDisabled, setButtoDisabled] = useState(false)
     const navigate = useNavigate()
 
-
-    function createNewScreen(event: React.FormEvent<HTMLFormElement>) {
-        event.preventDefault()
-
-        const send = async () => {
-           setButtoDisabled(true)
-            try {
-
-                const sucess = await axios.post("https://siempre-tecnologia-backend-5obk.onrender.com/screens", { screen_name: screenName, screen_type: screenType }, config)
-                setDisplayForm(false)
-                setButtoDisabled(false)
-                setScreenName("")
-                console.log(sucess)
-            } catch (error) {
-                console.log(error)
-                setButtoDisabled(false)
-            }
-        }
-
-        send()
-    }
 
     useEffect(() => {
         const screens = async () => {
@@ -45,9 +30,10 @@ export default function Screens() {
                 console.log(error)
             }
         }
+
         screens()
 
-    }, [])
+    }, [updatePage])
 
 
     return (
@@ -55,17 +41,17 @@ export default function Screens() {
       
             <h1>Telas</h1>
             <div className="container_screens">
-                {screens?.map((screen) => (<div className="screen" onClick={() => navigate(`/tela/${screen.id}`)}>{screen.screen_name}</div>))}
+                {screens?.map((screen) => (<div className="screen"  onDoubleClick={() => navigate(`/tela/${screen.id}`)}>{screen.screen_name}</div>))}
             </div>
 
-            <form onSubmit={(event) => createNewScreen(event)}>
-                <input className="screenName" placeholder="Nome da tela" onChange={(text) => setScreenName(text.target.value)}></input>
+            <form onSubmit={(event) => createNewScreen(event, setButtoDisabled,setDisplayForm, setScreenName, screenName, screenType, updatePage, setUpdatePage)}>
+                <input className="screenName" placeholder="Nome da tela" onChange={(text) => setScreenName(text.target.value)} value={screenName}></input>
                 <input className={`type ${screenType === "açogue" ? "selected" : ""}`} type={"button"} value="Açogue" onClick={() => setScreenType("açogue")} />
                 <input className={`type ${screenType === "padaria" ? "selected" : ""}`} type={"button"} value="Padaria" onClick={() => setScreenType("padaria")} />
                 <input className={`type ${screenType === "neutro" ? "selected" : ""}`} type={"button"} value="Neutro" onClick={() => setScreenType("neutro")} />
-                <button disabled={buttonDisabled}>Criar tela</button>
+                <button className="createScreen" disabled={buttonDisabled}>Criar tela</button>
             </form>
-            <button onClick={() => setDisplayForm(!displayForm)}>Criar nova tela</button>
+            <button className="createNewScreen" onClick={() => setDisplayForm(!displayForm)}>Criar nova tela</button>
 
         </Container>
     )
@@ -80,7 +66,7 @@ const Container = styled.div<ScreensProps>`
     width: 100%;
     padding: 2rem;
     font-size: 1.6rem;
-    background-color: rgb(0,0,0,0.03);
+    
 
     h1{
         margin-bottom: 1.6rem;
@@ -106,6 +92,7 @@ const Container = styled.div<ScreensProps>`
         margin: 2.4rem 0;
         display: ${props => props.displayForm === true ? "flex" : "none"};
         flex-direction: column;
+        padding: 1rem 2rem;
 
         .screenName{
             font-size: 1.6rem;
@@ -115,12 +102,14 @@ const Container = styled.div<ScreensProps>`
             padding-left: 0.8rem;
             border-radius: 16px;
             width: 400px;
+            border: 1px solid #000000;
         }
 
         .type{
             font-size: 1rem;
             font-weight: bold;
             border-radius: 8px;
+            border: none;
             padding: 0rem 1rem;
             text-align: center;
             margin: 0.8rem 0;
@@ -138,8 +127,8 @@ const Container = styled.div<ScreensProps>`
             font-size: 1.4rem;
             padding: 0.4rem 1rem;
             font-weight: bold;
-            background-color: rgb(223,41,41,0.3);
-            color:  rgb(250, 8, 8);
+            background-color: #6195e2;
+            color: #FFFFFF;
             border-radius: 8px;
             border: none;
             cursor: pointer;
@@ -150,6 +139,21 @@ const Container = styled.div<ScreensProps>`
                 cursor: default;
             }
         }
+
+        .createScreen{
+            margin-top: 2rem;
+        }
+    }
+
+    .createNewScreen{
+        background-color: #6195e2;
+        font-size: 1.6rem;
+        font-weight: bold;
+        color: #FFFFFF;
+       padding: 1rem;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
     }
 
 `

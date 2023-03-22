@@ -30,7 +30,7 @@ export default function ScreenType1() {
     const Products = myProductsScreen.map((product) => product?.products)
     const active = localStorage.getItem("active")
     const navigate = useNavigate()
-    const isReady = myProductsScreen.length !== 0 && screen.id !== 0
+    const isReady = myProductsScreen.length !== 0 || screen.id !== 0
 
 
     useEffect(() => {
