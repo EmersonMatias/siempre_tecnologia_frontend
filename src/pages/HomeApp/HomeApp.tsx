@@ -5,14 +5,9 @@ import styled from "styled-components"
 import backgroundHome from "../../img/background_home.png"
 import logo from "../../img/logo.png"
 import iconWpp from "../../img/IconWpp.svg"
+import { UserData } from "../../types/types"
 
-export type UserData = {
-    account_type: "user" | "admin",
-    active: boolean,
-    name: string,
-    token: string,
-    id: number
-}
+
 
 export default function HomeApp() {
     const [userLogin, setDataLogin] = useState({ email: "", password: "" })

@@ -9,6 +9,15 @@ export type UserData = {
     id: number
 }
 
+export type UserDataGet = {
+    account_type: "user" | "admin",
+    active: boolean | null,
+    name: string | null,
+    token: string | null,
+    id: number | null
+}
+
+
 export type Users = {
     account_type: "users" | "admin",
     active: boolean,
@@ -78,4 +87,9 @@ export type CreateNewUserProps = {
     setUpdatePage: React.Dispatch<React.SetStateAction<boolean>>
     showCreateUser: boolean
     setShowCreateUser: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export type Login = {
+    email: string,
+    password: string
 }

@@ -1,10 +1,10 @@
 import { createContext } from "react";
-import { UserData } from "../types/types";
+import { UserData, UserDataGet } from "../types/types";
 
 
   type MyContextState = {
     userData: UserData,
-    setUserData: React.Dispatch<React.SetStateAction<UserData>>,
+    setUserData: React.Dispatch<React.SetStateAction<UserDataGet>>,
     config: object,
   }
   
