@@ -2,9 +2,10 @@ import axios from "axios"
 import { useEffect, useState } from "react"
 import styled from "styled-components"
 import { Screen } from "../../types/types"
-import { ProductType, ProductType2 } from "../User/UserScreen"
+import { ProductType } from "../User/UserScreen"
 import promo2 from "../../img/promo.png"
 import { useParams } from "react-router-dom"
+import { ProductType2 } from "../User/MyProducts"
 
 type PropsProductsTable = {
     screen: Screen,

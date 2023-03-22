@@ -124,15 +124,6 @@ export async function UpdateScreen(screen: Screen){
     
 }
 
-
-
-
-
-
-
-
-
-
 export const  Change = {
     PositionProductLeft,
     PositionProductRight,

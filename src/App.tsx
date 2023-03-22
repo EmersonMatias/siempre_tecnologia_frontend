@@ -24,7 +24,7 @@ function App() {
     <BrowserRouter>
       <GlobalStyle />
 
-      <MyContext.Provider value={{ setUserData, userData, config }}>
+      <MyContext.Provider value={{ userData,setUserData, config }}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/admin" element={<AdminScreen />} />

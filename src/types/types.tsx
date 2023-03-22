@@ -62,3 +62,20 @@ export type Files = {
     url: string,
     user_id: number
 }
+
+export type NewUser = {
+    name: string,
+    email: string,
+    password: string
+    phone: string,
+    city: string,
+    adress: string,
+    price: number
+}
+
+export type CreateNewUserProps = {
+    updatePage: boolean,
+    setUpdatePage: React.Dispatch<React.SetStateAction<boolean>>
+    showCreateUser: boolean
+    setShowCreateUser: React.Dispatch<React.SetStateAction<boolean>>
+}

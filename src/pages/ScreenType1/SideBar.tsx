@@ -7,7 +7,7 @@ import { Files, Screen } from "../../types/types"
 
 type PropsSideBar = {
     password: number,
-    screen: Screen
+    screen: Screen 
 }
 
 export default function SideBar({ password, screen }: PropsSideBar) {

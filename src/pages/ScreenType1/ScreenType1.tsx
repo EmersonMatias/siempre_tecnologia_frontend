@@ -7,36 +7,16 @@ import iconSetting from "../../img/iconSetting.svg"
 import axios from "axios"
 import { useNavigate, useParams } from "react-router-dom"
 import { ProductScreen, Screen } from "../../types/types"
-import { ProductType } from "../User/UserScreen"
 import { ProductType2 } from "../User/MyProducts"
-
+import { passwordConfigs } from "./functionsSideBar"
+import iconLoading from "../../img/Loading.svg"
+import { defaultScreen, getProducts, getProductsScreen, getScreen } from "./functionsScreen"
 
 
 export default function ScreenType1() {
     const [password, setPassword] = useState(0)
     const [passworDigit, setPasswordDigit] = useState("")
-    const [screen, setScreen] = useState<Screen>({
-        background_url: "",
-        font_family: "",
-        font_size: 1,
-        id: 0,
-        screen_name: "",
-        show_banner: true,
-        show_counter: true,
-        show_productstable: true,
-        space_lines: 0,
-        table_lines: 5,
-        user_id: 0,
-        color_lines: "  ",
-        width_table: 0,
-        price_position: "",
-        product_position: "",
-        background_color_title: "",
-        font_family_title: "",
-        color: "",
-        color_title: "",
-        banner_time: 1000
-    })
+    const [screen, setScreen] = useState<Screen>(defaultScreen)
     const token = localStorage.getItem("token")
     const config = { headers: { Authorization: `Bearer ${token}` } }
     const [settings, setSettings] = useState({
@@ -50,101 +30,78 @@ export default function ScreenType1() {
     const Products = myProductsScreen.map((product) => product?.products)
     const active = localStorage.getItem("active")
     const navigate = useNavigate()
-    console.log(myProductsScreen)
+    const isReady = myProductsScreen.length !== 0 && screen.id !== 0
 
-    function passwordConfigs(event: React.KeyboardEvent<HTMLDivElement>) {
-        if(event.key === "Enter"){
-            
-            if(passworDigit.length){
-                setPasswordDigit("")
-                return setPassword(Number(passworDigit))
-            }
 
-            setPassword(password + 1)
-
-            if ('speechSynthesis' in window) {
-                const utterance = new SpeechSynthesisUtterance();
-                utterance.text = `Senha ${password + 1}. Repetindo, senha ${password + 1}`;
-                utterance.lang = 'pt-BR';
-                utterance.rate = 1;
-                utterance.pitch = 1;
-                utterance.volume = 1;
-                speechSynthesis.speak(utterance);
-            }
-        }
-
-        if(!isNaN(Number(event.key))){
-            setPasswordDigit(passworDigit+event.key)
-            console.log(passworDigit)
-        }
-
-        if(event.key === "Escape"){
-            setPasswordDigit("")
-        }
-
-    }
- 
     useEffect(() => {
-        if(active !== "true"){
+        if (active !== "true") {
             navigate("/user")
         }
 
-        const screens = async () => {
-            try {
-                const sucess = await axios.get(`https://siempre-tecnologia-backend-5obk.onrender.com/screen/${screen_id}`, config)
-                setScreen(sucess?.data)
-            } catch (error) {
-                console.log(error)
-            }
-        }
-        screens()
-        const getProducts = async () => {
-            try {
-                const productsList = await axios.get("https://siempre-tecnologia-backend-5obk.onrender.com/products", config)
-                setMyProducts(productsList.data)
-            } catch (error) {
-                console.log(error)
-            }
-        }
-        getProducts()
-        const getProductsScreen = async() => {
-            try{
-                const sucess = await axios.get(`https://siempre-tecnologia-backend-5obk.onrender.com/productsscreen/${screen_id}`, config)
-                setMyProductsScreen(sucess.data)
-            }catch(error){
-                console.log(error)
-            }
-        }
-        getProductsScreen()
+        getScreen(screen_id, config, setScreen)
+       
+        getProducts(config, setMyProducts)
+     
+        getProductsScreen(screen_id, config, setMyProductsScreen)
     }, [settings.update])
 
     return (
-        <Container onKeyDown={(event) =>  passwordConfigs(event)} tabIndex={0}>
-            <Settings 
-                settings={settings} 
-                setSettings={setSettings}
-                screen={screen} setScreen={setScreen} 
-                myProducts={myProducts} 
-                ProductsId={ProductsId} 
-                myProductsScreen={myProductsScreen} 
-            />
+        <Container onKeyDown={(event) => passwordConfigs(event, password, setPassword, passworDigit, setPasswordDigit)} tabIndex={0} isReady={isReady}>
 
-            <SideBar password={password} screen={screen} />
-            <ProductsTable screen={screen} Products={Products} />
-            <img className="settings" src={iconSetting} onClick={() => setSettings({ ...settings, settingVisible: true })} />
-            <div className="backPage" onClick={() =>navigate("/user")}>Voltar</div>
+            <div className="contentContainer">
+                <Settings
+                    settings={settings}
+                    setSettings={setSettings}
+                    screen={screen} setScreen={setScreen}
+                    myProducts={myProducts}
+                    ProductsId={ProductsId}
+                    myProductsScreen={myProductsScreen}
+                />
+
+                <SideBar password={password} screen={screen} />
+                <ProductsTable screen={screen} Products={Products} />
+                <img className="settings" src={iconSetting} onClick={() => setSettings({ ...settings, settingVisible: true })} />
+                <div className="backPage" onClick={() => navigate("/user")}>Voltar</div>
+            </div>
+
+            <div className="loadingScreen">
+                <img src={iconLoading} />
+            </div>
+
         </Container>
     )
 }
 
-const Container = styled.div`
+type ScreenProps = {
+    isReady: boolean
+}
+
+const Container = styled.div<ScreenProps>`
     max-width: 100%;
     height: 100vh;
-    background-color: #0026ff;
     display: flex;
     color: white;
     overflow: hidden;
-    position: relative;
+
+    .loadingScreen{
+        width: 100%;
+        height: 100%;
+        display: ${props => props.isReady === true ? "none" : "flex"};
+        justify-content: center;
+
+        img{
+          height: 100%;
+        }
+    }
+  
+    .contentContainer{
+        width: 100%;
+        height: 100;
+        background-color: #0026ff;
+        display: ${props => props.isReady === true ? "flex" : "none"};
+        color: white;
+        position: relative;
+    }
     
     .backPage{
         font-size: 1.6rem;
