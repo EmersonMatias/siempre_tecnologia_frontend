@@ -37,7 +37,6 @@ export default function UserScreen() {
             {active === "true" ? null : <BlockPage />}
 
             <header>
-                <h1>Tabela de Configurações</h1>
                 <div className="exit" onClick={() => exitAccount(setUserData, setUpdatePage, updatePage)}>
                     Sair
                 </div>
@@ -60,6 +59,7 @@ const Container = styled.div`
 
     .exit{
         position: absolute;
+        top: 16px;
         right: 40px;
         font-size: 1.6rem;
         font-weight: bold;
@@ -75,7 +75,7 @@ const Container = styled.div`
     header{
         position: relative;
         width: 100%;
-        height: 4rem;
+        height: 1rem;
         display: flex;
         align-items: center;
         justify-content: center;

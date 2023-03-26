@@ -5,13 +5,15 @@ import MyContext from "../../context/context"
 import { useNavigate } from "react-router-dom"
 import { Screen } from "../../types/types"
 import { createNewScreen } from "./functionsUser"
+import iconTv from "../../img/iconTv.svg"
+import iconClose from "../../img/iconClose.svg"
 
 type PropsScreen = {
     updatePage: boolean,
-    setUpdatePage:  React.Dispatch<React.SetStateAction<boolean>>
+    setUpdatePage: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export default function Screens({updatePage, setUpdatePage}: PropsScreen ) {
+export default function Screens({ updatePage, setUpdatePage }: PropsScreen) {
     const { config } = useContext(MyContext)
     const [displayForm, setDisplayForm] = useState(false)
     const [screenName, setScreenName] = useState("")
@@ -38,19 +40,25 @@ export default function Screens({updatePage, setUpdatePage}: PropsScreen ) {
 
     return (
         <Container displayForm={displayForm} screenType={screenType}>
-      
+
             <h1>Telas</h1>
             <div className="container_screens">
-                {screens?.map((screen) => (<div className="screen"  onDoubleClick={() => navigate(`/tela/${screen.id}`)}>{screen.screen_name}</div>))}
+
+                {screens?.map((screen) => (<div className="screen" onDoubleClick={() => navigate(`/tela/${screen.id}`)}><img src={iconTv} /> <p>{screen.screen_name}</p></div>))}
             </div>
 
-            <form onSubmit={(event) => createNewScreen(event, setButtoDisabled,setDisplayForm, setScreenName, screenName, screenType, updatePage, setUpdatePage)}>
-                <input className="screenName" placeholder="Nome da tela" onChange={(text) => setScreenName(text.target.value)} value={screenName}></input>
-                <input className={`type ${screenType === "açogue" ? "selected" : ""}`} type={"button"} value="Açogue" onClick={() => setScreenType("açogue")} />
-                <input className={`type ${screenType === "padaria" ? "selected" : ""}`} type={"button"} value="Padaria" onClick={() => setScreenType("padaria")} />
-                <input className={`type ${screenType === "neutro" ? "selected" : ""}`} type={"button"} value="Neutro" onClick={() => setScreenType("neutro")} />
-                <button className="createScreen" disabled={buttonDisabled}>Criar tela</button>
-            </form>
+
+            <div className="formContainer">
+                <form onSubmit={(event) => createNewScreen(event, setButtoDisabled, setDisplayForm, setScreenName, screenName, screenType, updatePage, setUpdatePage)}>
+                    <input className="screenName" placeholder="Nome da tela" onChange={(text) => setScreenName(text.target.value)} value={screenName}></input>
+                    <input className={`type ${screenType === "açogue" ? "selected" : ""}`} type={"button"} value="Açogue" onClick={() => setScreenType("açogue")} />
+                    <input className={`type ${screenType === "padaria" ? "selected" : ""}`} type={"button"} value="Padaria" onClick={() => setScreenType("padaria")} />
+                    <input className={`type ${screenType === "neutro" ? "selected" : ""}`} type={"button"} value="Neutro" onClick={() => setScreenType("neutro")} />
+                    <button className="createScreen" disabled={buttonDisabled}>Criar tela</button>
+                </form>
+                <img src={iconClose} onClick={ () => setDisplayForm(false)}  className="closeCreateNewScreen" />
+            </div>
+
             <button className="createNewScreen" onClick={() => setDisplayForm(!displayForm)}>Criar nova tela</button>
 
         </Container>
@@ -66,33 +74,66 @@ const Container = styled.div<ScreensProps>`
     width: 100%;
     padding: 2rem;
     font-size: 1.6rem;
-    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
     h1{
-        margin-bottom: 1.6rem;
+        font-size: 5rem;
+        font-weight: bold;
+        text-align: center;
     }
 
     .container_screens{
         display: flex;
-        padding: 2rem;
         flex-wrap: wrap;
+        padding: 0 1rem;
     }
 
     .screen{
         width: 200px;
-        height: 200px;
-        background-color: #6195e2;
         display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
         margin: 1rem auto;
+        cursor: pointer;
+
+        img{
+            width: 100%;
+        }
+
+        p{
+            width: 100%;
+            text-align: center;
+        }
+    }
+
+    .formContainer{
+        display: ${props => props.displayForm === true ? "flex" : "none"};
+        background-color: #fafafa;
+        position: fixed;
+        top: 20%;
+        width: 30%;
+        border-radius: 8px;
+        box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
+
+        img{
+            width: 40px;
+            position: absolute;
+            right: 8px;
+            top: 8px;
+            cursor: pointer;
+        }
     }
 
     form{
+        width: 100%;
         margin: 2.4rem 0;
-        display: ${props => props.displayForm === true ? "flex" : "none"};
+        display: flex;
         flex-direction: column;
         padding: 1rem 2rem;
+        align-items: center;
 
         .screenName{
             font-size: 1.6rem;
@@ -101,7 +142,7 @@ const Container = styled.div<ScreensProps>`
             padding-bottom: 0.4rem;
             padding-left: 0.8rem;
             border-radius: 16px;
-            width: 400px;
+            width: 300px;
             border: 1px solid #000000;
         }
 
@@ -150,10 +191,11 @@ const Container = styled.div<ScreensProps>`
         font-size: 1.6rem;
         font-weight: bold;
         color: #FFFFFF;
-       padding: 1rem;
+        padding: 1rem;
         border-radius: 8px;
         border: none;
         cursor: pointer;
+        margin-top: 2rem;
     }
 
 `
