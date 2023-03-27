@@ -8,10 +8,10 @@ import Home from "./pages/Home/Home"
 import HomeApp from "./pages/HomeApp/HomeApp"
 import ScreenType1 from "./pages/ScreenType1/ScreenType1"
 import UserScreen from "./pages/User/UserScreen"
-import { UserData } from "./types/types"
+import { UserData, UserDataGet } from "./types/types"
 
 function App() {
-  const [userData, setUserData] = useState<UserData>({
+  const [userData, setUserData] = useState<UserDataGet>({
     account_type: "user",
     active: false,
     name: "",

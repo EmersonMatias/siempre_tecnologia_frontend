@@ -4,7 +4,6 @@ export function passwordConfigs(event: React.KeyboardEvent<HTMLDivElement>, pass
         console.log(passworDigit, password)
 
         if (passworDigit.length) {
-            console.log("AAA")
             setPasswordDigit("")
           
 

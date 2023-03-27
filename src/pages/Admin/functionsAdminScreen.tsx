@@ -1,5 +1,5 @@
 import axios from "axios"
-import { Users } from "../../types/types.js"
+import { UserDataGet, Users } from "../../types/types.js"
 import { UserData } from "../../types/types";
 
 async function desactiveAccount(e: Users, updatePage: boolean, setUpdatePage: React.Dispatch<React.SetStateAction<boolean>>, setDesactiveButton: React.Dispatch<React.SetStateAction<boolean>>, config: object) {
@@ -23,7 +23,7 @@ async function desactiveAccount(e: Users, updatePage: boolean, setUpdatePage: Re
     }
 }
 
-function exitAccount(setUserData: React.Dispatch<React.SetStateAction<UserData>>, updatePage: boolean, setUpdatePage: React.Dispatch<React.SetStateAction<boolean>> ) {
+function exitAccount(setUserData: React.Dispatch<React.SetStateAction<UserDataGet>>, updatePage: boolean, setUpdatePage: React.Dispatch<React.SetStateAction<boolean>> ) {
     localStorage.removeItem("token")
     localStorage.removeItem("account_type")
     localStorage.removeItem("name")

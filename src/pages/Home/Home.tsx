@@ -1,11 +1,10 @@
-import axios from "axios"
 import { useContext, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import styled from "styled-components"
 import MyContext from "../../context/context"
 import backgroundHome from "../../img/background_home.png"
 import logo from "../../img/logo.png"
-import { Login, UserData } from "../../types/types"
+import { Login } from "../../types/types"
 import iconWpp from "../../img/IconWpp.svg"
 import { signIn } from "./functionsHome"
 

@@ -3,12 +3,12 @@ import { UserData, UserDataGet } from "../types/types";
 
 
   type MyContextState = {
-    userData: UserData,
-    setUserData: React.Dispatch<React.SetStateAction<UserData>>,
+    userData: UserDataGet,
+    setUserData: React.Dispatch<React.SetStateAction<UserDataGet>>,
     config: object,
   }
   
-  const defaultUserData: UserData = {
+  const defaultUserData: UserDataGet = {
     account_type: "user",
     active: false,
     name: "",
