@@ -5,7 +5,7 @@ import { ProductType2 } from "../User/MyProducts"
 
 export async function getProductsScreen(screen_id: string |undefined, config: object, setMyProductsScreen: React.Dispatch<React.SetStateAction<ProductScreen[]>>) {
     try {
-        const sucess = await axios.get(`https://siempre-tecnologia-backend-5obk.onrender.com/productsscreen/${screen_id}`, config)
+        const sucess = await axios.get(`http://localhost:4000/productsscreen/${screen_id}`, config)
         setMyProductsScreen(sucess.data)
     } catch (error) {
         console.log(error)
@@ -14,7 +14,7 @@ export async function getProductsScreen(screen_id: string |undefined, config: ob
 
 export async function getProducts(config: object , setMyProducts: React.Dispatch<React.SetStateAction<ProductType2[]>>) {
     try {
-        const productsList = await axios.get("https://siempre-tecnologia-backend-5obk.onrender.com/products", config)
+        const productsList = await axios.get("http://localhost:4000/products", config)
         setMyProducts(productsList.data)
     } catch (error) {
         console.log(error)
@@ -23,7 +23,7 @@ export async function getProducts(config: object , setMyProducts: React.Dispatch
 
 export async function getScreen(screen_id: string |undefined, config: object, setScreen: React.Dispatch<React.SetStateAction<Screen>>){
     try {
-        const sucess = await axios.get(`https://siempre-tecnologia-backend-5obk.onrender.com/screen/${screen_id}`, config)
+        const sucess = await axios.get(`http://localhost:4000/screen/${screen_id}`, config)
         setScreen(sucess?.data)
     } catch (error) {
         console.log(error)

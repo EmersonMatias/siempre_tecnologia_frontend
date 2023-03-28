@@ -38,7 +38,7 @@ export default function ProductsTable({ screen, Products}: PropsProductsTable) {
         const getPromotionalProducts =  async() => {
 
             try{
-                const sucess = await axios.get(`https://siempre-tecnologia-backend-5obk.onrender.com/promotionalproducts/${screen_id}`, config)
+                const sucess = await axios.get(`http://localhost:4000/promotionalproducts/${screen_id}`, config)
                 setPromotionalProducts(sucess.data.map((product: any) => product?.product_id ))
             }catch(error){
                 console.log(error)
@@ -59,7 +59,7 @@ export default function ProductsTable({ screen, Products}: PropsProductsTable) {
 
     async function promotionalLine(event:React.MouseEvent<HTMLDivElement, MouseEvent>, e: ProductType2){
         try{
-            const sucess = await axios.post("https://siempre-tecnologia-backend-5obk.onrender.com/promotionalproducts",{product_id: e?.id ,screen_id}, config)
+            const sucess = await axios.post("http://localhost:4000/promotionalproducts",{product_id: e?.id ,screen_id}, config)
             console.log(sucess)
         }catch(error){
             console.log(error)

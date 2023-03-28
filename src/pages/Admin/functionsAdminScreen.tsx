@@ -7,7 +7,7 @@ async function desactiveAccount(e: Users, updatePage: boolean, setUpdatePage: Re
         const dataUpdate = { active: false, userId: e.id }
 
         setDesactiveButton(true)
-        const update = await axios.put("https://siempre-tecnologia-backend-5obk.onrender.com/updateuser", dataUpdate, config)
+        const update = await axios.put("http://localhost:4000/updateuser", dataUpdate, config)
 
         setUpdatePage(!updatePage)
 
@@ -16,7 +16,7 @@ async function desactiveAccount(e: Users, updatePage: boolean, setUpdatePage: Re
     if (e.active === false) {
         const dataUpdate = { active: true, userId: e.id }
         setDesactiveButton(true)
-        const update = await axios.put("https://siempre-tecnologia-backend-5obk.onrender.com/updateuser", dataUpdate, config)
+        const update = await axios.put("http://localhost:4000/updateuser", dataUpdate, config)
         setUpdatePage(!updatePage)
 
         setDesactiveButton(false)

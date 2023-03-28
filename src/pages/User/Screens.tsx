@@ -26,7 +26,7 @@ export default function Screens({ updatePage, setUpdatePage }: PropsScreen) {
     useEffect(() => {
         const screens = async () => {
             try {
-                const sucess = await axios.get("https://siempre-tecnologia-backend-5obk.onrender.com/screens", config)
+                const sucess = await axios.get("http://localhost:4000/screens", config)
                 setScreens(sucess?.data)
             } catch (error) {
                 console.log(error)

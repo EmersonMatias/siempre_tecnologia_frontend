@@ -37,18 +37,19 @@ export default function UploadFiles({ screen_id }: UploadFiles) {
     };
 
     const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+
         event.preventDefault();
         if (file) {
             const formData = new FormData();
             formData.append('file', file);
             setDisableButton(true)
             console.log(screen_id, "bbb")
-            axios.post(`https://siempre-tecnologia-backend-5obk.onrender.com/uploadfile/${screenId}`, formData, config)
+            axios.post(`http://localhost:4000/uploadfile/${screenId}`, formData, config)
                 .then((response) => {
                     setDisableButton(false)
                     setFile(null)
                     setFilename("")
-                    console.log(response)
+                    alert("Arquivo enviado com sucesso!")
                 })
                 .catch((error) => {
                     console.log(error);
@@ -61,7 +62,7 @@ export default function UploadFiles({ screen_id }: UploadFiles) {
         const getFiles = async () => {
             if (screenId) {
                 try {
-                    const sucess = await axios.get(`https://siempre-tecnologia-backend-5obk.onrender.com/getfiles/${screen_id}`, config)
+                    const sucess = await axios.get(`http://localhost:4000/getfiles/${screen_id}`, config)
                     setMyFiles(sucess.data)
                 } catch (error) {
                     console.log(error)
@@ -81,7 +82,7 @@ export default function UploadFiles({ screen_id }: UploadFiles) {
                     <input type="file" onChange={handleFileChange} />
                 </div>
                 <div>
-                    <button type="submit" disabled={disableButton}>Enviar</button>
+                    <button className="sendFile" type="submit" disabled={disableButton}>Enviar</button>
                 </div>
             </form>
             <h1>Meus Arquivos</h1>
@@ -104,7 +105,7 @@ const Container = styled.div`
     padding: 2rem;
     background-color: rgb(0,0,0,0.03);
 
-    button{
+    .sendFile{
         width: 200px;
         height: 40px;
         font-size: 1.4rem;
@@ -114,6 +115,7 @@ const Container = styled.div`
         border: none;
         color: #ffffff;
         margin-top: 2rem;
+        cursor: pointer;
 
         &:disabled{
             background-color: #f0d1d1;

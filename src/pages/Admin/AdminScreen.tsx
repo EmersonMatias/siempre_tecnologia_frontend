@@ -28,7 +28,7 @@ export default function AdminScreen() {
         //"https://siempre-tecnologia-backend-5obk.onrender.com/users"
         async function getUsers() {
             try {
-                const users = await axios.get(`https://siempre-tecnologia-backend-5obk.onrender.com/users`, config)
+                const users = await axios.get(`http://localhost:4000/users`, config)
                 setUsers(users.data)
             } catch (error) {
                 console.log(error)

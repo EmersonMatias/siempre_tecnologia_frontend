@@ -33,7 +33,7 @@ export default function SideBar({ password, screen }: PropsSideBar) {
     useEffect(() => {
         const getFiles = async () => {
             try{
-                const sucess = await  axios.get(`https://siempre-tecnologia-backend-5obk.onrender.com/getfiles/${screen_id}`,config )
+                const sucess = await  axios.get(`http://localhost:4000/getfiles/${screen_id}`,config )
                 setFiles(sucess.data)
            
             }catch(error){

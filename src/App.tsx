@@ -8,7 +8,8 @@ import Home from "./pages/Home/Home"
 import HomeApp from "./pages/HomeApp/HomeApp"
 import ScreenType1 from "./pages/ScreenType1/ScreenType1"
 import UserScreen from "./pages/User/UserScreen"
-import { UserData, UserDataGet } from "./types/types"
+import { UserDataGet } from "./types/types"
+
 
 function App() {
   const [userData, setUserData] = useState<UserDataGet>({
@@ -19,6 +20,7 @@ function App() {
     id: 0
   })
   const config = { headers: { Authorization: `Bearer ${userData?.token}` } }
+
 
   return (
     <BrowserRouter>

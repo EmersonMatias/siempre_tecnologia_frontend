@@ -12,7 +12,7 @@ export async function DeleteFile(id: number){
     if(confirmDelete){
         const deleteFile = async  () => {
             try{
-                const sucess = await axios.delete(`https://siempre-tecnologia-backend-5obk.onrender.com/deletefile/${id}`, config)
+                const sucess = await axios.delete(`http://localhost:4000/deletefile/${id}`, config)
                 alert("Arquivo excluido com sucesso!")
             }catch(error){
                 console.log(error)
@@ -23,7 +23,7 @@ export async function DeleteFile(id: number){
     }
 }
 
-export function exitAccount(setUserData: React.Dispatch<React.SetStateAction<UserData>>, setUpdatePage: React.Dispatch<React.SetStateAction<boolean>>, updatePage: boolean) {
+export function exitAccount(setUserData: React.Dispatch<React.SetStateAction<UserDataGet>>, setUpdatePage: React.Dispatch<React.SetStateAction<boolean>>, updatePage: boolean) {
     localStorage.removeItem("token")
     localStorage.removeItem("account_type")
     localStorage.removeItem("name")
@@ -41,7 +41,7 @@ export function exitAccount(setUserData: React.Dispatch<React.SetStateAction<Use
 
 export async function getProducts(setMyProducts: React.Dispatch<React.SetStateAction<ProductType2[]>>)  {
     try {
-        const productsList = await axios.get("https://siempre-tecnologia-backend-5obk.onrender.com/products", config)
+        const productsList = await axios.get("http://localhost:4000/products", config)
         console.log(productsList.data, "aaaaaaaaaaaa")
         setMyProducts(productsList.data)
     } catch (error) {
@@ -57,7 +57,7 @@ export function createNewScreen(event: React.FormEvent<HTMLFormElement>, setButt
        setButtoDisabled(true)
         try {
 
-            const sucess = await axios.post("https://siempre-tecnologia-backend-5obk.onrender.com/screens", { screen_name: screenName, screen_type: screenType }, config)
+            const sucess = await axios.post("http://localhost:4000/screens", { screen_name: screenName, screen_type: screenType }, config)
             setDisplayForm(false)
             setButtoDisabled(false)
             setScreenName("")
