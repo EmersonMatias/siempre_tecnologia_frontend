@@ -4,7 +4,7 @@ import styled from "styled-components"
 import MyContext from "../../context/context"
 import { useNavigate } from "react-router-dom"
 import { Screen } from "../../types/types"
-import { createNewScreen } from "./functionsUser"
+import { createNewScreen, deleteScreen } from "./functionsUser"
 import iconTv from "../../img/iconTv.svg"
 import iconClose from "../../img/iconClose.svg"
 
@@ -44,7 +44,7 @@ export default function Screens({ updatePage, setUpdatePage }: PropsScreen) {
             <h1>Telas</h1>
             <div className="container_screens">
 
-                {screens?.map((screen) => (<div className="screen" onDoubleClick={() => navigate(`/tela/${screen.id}`)}><img src={iconTv} /> <p>{screen.screen_name}</p></div>))}
+                {screens?.map((screen) => (<div className="screen" ><img onClick={() => navigate(`/tela/${screen.id}`)  } src={iconTv} /> <p onDoubleClick={() => deleteScreen(screen.id, updatePage, setUpdatePage)}>{screen.screen_name}</p></div>))}
             </div>
 
 
@@ -97,15 +97,17 @@ const Container = styled.div<ScreensProps>`
         align-items: center;
         justify-content: center;
         margin: 1rem auto;
-        cursor: pointer;
+
 
         img{
             width: 100%;
+            cursor: pointer;
         }
 
         p{
             width: 100%;
             text-align: center;
+            cursor: pointer;
         }
     }
 

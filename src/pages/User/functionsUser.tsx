@@ -1,5 +1,5 @@
 import axios from "axios"
-import { UserData, UserDataGet } from "../../types/types"
+import { UserDataGet } from "../../types/types"
 import { ProductType2 } from "./MyProducts"
 
 
@@ -71,4 +71,15 @@ export function createNewScreen(event: React.FormEvent<HTMLFormElement>, setButt
     }
 
     send()
+}
+
+export async function deleteScreen(id: number, updatePage: boolean, setUpdatePage: React.Dispatch<React.SetStateAction<boolean>>){
+
+    try{
+        const sucess = await axios.delete(`http://localhost:4000/screen/${id}`, config)
+        setUpdatePage(!updatePage)
+        alert("Tela deletada com sucesso!")
+    }catch(error){
+        console.log(error)
+    }
 }

@@ -1,6 +1,6 @@
 import axios from "axios"
 import { UserDataGet, Users } from "../../types/types.js"
-import { UserData } from "../../types/types";
+
 
 async function desactiveAccount(e: Users, updatePage: boolean, setUpdatePage: React.Dispatch<React.SetStateAction<boolean>>, setDesactiveButton: React.Dispatch<React.SetStateAction<boolean>>, config: object) {
     if (e.active === true) {
@@ -48,7 +48,7 @@ function updateName(userId: number, updatePage: boolean, setUpdatePage: React.Di
             setUpdateUserData(true)
 
             try{
-                const sucess = await axios.put("https://siempre-tecnologia-backend-5obk.onrender.com/updateusername", {name: newName, userId}, config)
+                const sucess = await axios.put("http://localhost:4000/updateusername", {name: newName, userId}, config)
                 setUpdatePage(!updatePage)
                 setUpdateUserData(false)
                 alert("Nome do cliente atualizado com sucesso!")
@@ -72,7 +72,7 @@ function updatePhone( userId: number, updatePage: boolean, setUpdatePage: React.
             setUpdateUserData(true)
 
             try{
-                const sucess = await axios.put("https://siempre-tecnologia-backend-5obk.onrender.com/updateuserphone", {phone: newPhone, userId}, config)
+                const sucess = await axios.put("http://localhost:4000/updateuserphone", {phone: newPhone, userId}, config)
                 setUpdatePage(!updatePage)
                 setUpdateUserData(false)
                 console.log(sucess)
@@ -94,7 +94,7 @@ function updateCity( userId: number,  updatePage: boolean, setUpdatePage: React.
             setUpdateUserData(true)
 
             try{
-                const sucess = await axios.put("https://siempre-tecnologia-backend-5obk.onrender.com/updateusercity", {city: newCity, userId}, config)
+                const sucess = await axios.put("http://localhost:4000/updateusercity", {city: newCity, userId}, config)
                 setUpdatePage(!updatePage)
                 setUpdateUserData(false)
                 console.log(sucess)
@@ -116,7 +116,7 @@ function updateAdress( userId: number,  updatePage: boolean, setUpdatePage: Reac
             setUpdateUserData(true)
 
             try{
-                const sucess = await axios.put("https://siempre-tecnologia-backend-5obk.onrender.com/updateuseradress", {adress: newAdress, userId}, config)
+                const sucess = await axios.put("http://localhost:4000/updateuseradress", {adress: newAdress, userId}, config)
                 setUpdatePage(!updatePage)
                 setUpdateUserData(false)
                 console.log(sucess)
@@ -137,7 +137,7 @@ function updatePrice( userId: number,  updatePage: boolean, setUpdatePage: React
         const updatePrice = async () => {
         
             try{
-                const sucess = await axios.put("https://siempre-tecnologia-backend-5obk.onrender.com/updateuserprice", {price: Number(newPrice)*100, userId}, config)
+                const sucess = await axios.put("http://localhost:4000/updateuserprice", {price: Number(newPrice)*100, userId}, config)
                 setUpdatePage(!updatePage)
                 console.log(sucess)
             }catch(error){
@@ -157,14 +157,14 @@ function deleteAccount( userId: number, updatePage: boolean, setUpdatePage: Reac
             setUpdateUserData(true)
 
             try{
-               const sucess = await axios.delete(`https://siempre-tecnologia-backend-5obk.onrender.com/deleteuser/${userId}`, config)
+               const sucess = await axios.delete(`http://localhost:4000/deleteuser/${userId}`, config)
                setUpdatePage(!updatePage)
                setUpdateUserData(false)
                alert("Conta deletada com sucesso!")
            }catch(error){
             setUpdateUserData(false)
-                alert("Não foi possível deletar essa conta! Tente mais tarde.")
                 console.log(error)
+                alert("Não foi possível deletar essa conta! Tente mais tarde.")
            }
        }
    
@@ -244,15 +244,15 @@ export function filterProducts(
     else {
         return users.map((e, index) => (
             <tr key={index}>
-                <td>{e.id}</td>
+                <td onClick={() => user.deleteAccount(e.id, updatePage, setUpdatePage, config, updateUserData, setUpdateUserData) }>{e.id}</td>
                 <td onClick={() => user.updateName(e.id, updatePage, setUpdatePage, config, updateUserData, setUpdateUserData) }>{e.name}</td>
                 <td>{e.email}</td>
-                <td>{e.phone}</td>
-                <th>{e.city}</th>
-                <th>{e.adress}</th>
+                <td onClick={() => user.updatePhone(e.id, updatePage, setUpdatePage, config, updateUserData, setUpdateUserData) }>{e.phone}</td>
+                <th onClick={() => user.updateCity(e.id, updatePage, setUpdatePage, config, updateUserData, setUpdateUserData) }>{e.city}</th>
+                <th onClick={() => user.updateAdress(e.id, updatePage, setUpdatePage, config, updateUserData, setUpdateUserData) }>{e.adress}</th>
                 <td>{ }</td>
                 <td><button className={e.active === true ? "active" : "desactive"} disabled={desactiveButton} onClick={() => user.desactiveAccount(e, updatePage, setUpdatePage,setDesactiveButton, config)}>{e.active === true ? "Ativa" : "Desativada"}</button></td>
-                <td> R$ {(e.price / 100).toFixed(2).replace(".", ",")}</td>
+                <td onClick={() => user.updatePrice(e.id, updatePage, setUpdatePage, config) }> R$ {(e.price / 100).toFixed(2).replace(".", ",")}</td>
             </tr>
         ))
     }
