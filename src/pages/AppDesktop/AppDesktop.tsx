@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import RegisterProducts from "../User/RegisterProducts"
+import RegisterProducts from "../userScreen/RegisterProducts"
 
 export default function AppDesktop() {
     return (

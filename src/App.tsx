@@ -1,26 +1,22 @@
 import { useState } from "react"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 import GlobalStyle from "./components/global"
+import { defaultUserData } from "./constants/defaultData"
 import MyContext from "./context/context"
-import AdminScreen from "./pages/Admin/AdminScreen"
+import AdminScreen from "./pages/adminScreen"
 import AppDesktop from "./pages/AppDesktop/AppDesktop"
 import Home from "./pages/Home/Home"
 import HomeApp from "./pages/HomeApp/HomeApp"
-import ScreenType1 from "./pages/ScreenType1/ScreenType1"
-import UserScreen from "./pages/User/UserScreen"
+import ScreenType1 from "./pages/userMonitor"
+import UserScreen from "./pages/userScreen"
 import { UserDataGet } from "./types/types"
 
 
 function App() {
-  const [userData, setUserData] = useState<UserDataGet>({
-    account_type: "user",
-    active: false,
-    name: "",
-    token: "",
-    id: 0
-  })
+  const [userData, setUserData] = useState<UserDataGet>(defaultUserData)
   const config = { headers: { Authorization: `Bearer ${userData?.token}` } }
 
+  console.log(userData)
 
   return (
     <BrowserRouter>

@@ -1,0 +1,1 @@
+export const BASE_URL = "https://siempre-tecnologia-backend-5obk.onrender.com"

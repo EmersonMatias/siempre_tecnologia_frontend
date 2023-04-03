@@ -1,9 +1,7 @@
 import axios from "axios"
 import { NavigateFunction } from "react-router-dom"
+import { BASE_URL } from "../../constants/constants"
 import { Login, UserData, UserDataGet } from "../../types/types"
-
-
-
 
 export async function signIn(
     e: React.FormEvent<HTMLFormElement>, 
@@ -17,10 +15,10 @@ export async function signIn(
 
     try {
         setDisableButton(true)
-        const login: UserData = await (await axios.post(`http://localhost:4000/signin`, userLogin)).data
+        const login: UserData = await (await axios.post(`${BASE_URL}/signin`, userLogin)).data
         setUserData(login)
 
-        localStorage.setItem("account_type", login?.account_type)
+        localStorage.setItem("account_type", login.account_type)
         localStorage.setItem("active", `${login.active}`)
         localStorage.setItem("name", login.name)
         localStorage.setItem("token", login.token)

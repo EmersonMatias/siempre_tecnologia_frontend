@@ -1,5 +1,5 @@
-import { ProductType2 } from "../pages/User/MyProducts"
-import { ProductType } from "../pages/User/UserScreen"
+import { ProductType2 } from "../pages/userMonitor/settings/myProducts"
+import { ProductType } from "../pages/userScreen"
 
 export type UserData = {
     account_type: "user" | "admin",
@@ -10,7 +10,7 @@ export type UserData = {
 }
 
 export type UserDataGet = {
-    account_type: "user" | "admin",
+    account_type: "user" | "admin" | "",
     active: boolean | null,
     name: string | null,
     token: string | null,
@@ -50,7 +50,9 @@ export type Screen = {
     font_family_title: string,
     color: string,
     color_title: string,
-    banner_time: number
+    banner_time: number,
+    bold: boolean,
+    italic: boolean
 }
 
 export type ProductScreen = {

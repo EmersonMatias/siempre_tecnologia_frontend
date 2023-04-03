@@ -1,4 +1,5 @@
 import { createContext } from "react";
+import { defaultUserData } from "../constants/defaultData";
 import { UserData, UserDataGet } from "../types/types";
 
 
@@ -8,14 +9,7 @@ import { UserData, UserDataGet } from "../types/types";
     config: object,
   }
   
-  const defaultUserData: UserDataGet = {
-    account_type: "user",
-    active: false,
-    name: "",
-    token: "",
-    id: 0
-  }
-  
+ 
   const MyContext = createContext<MyContextState>({
     userData: defaultUserData,
     setUserData: () => {},

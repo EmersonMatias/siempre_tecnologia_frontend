@@ -1,11 +1,11 @@
 import styled from "styled-components";
+import Exit from "../../components/exit";
 
 
-export default function BlockPage(){
-    return(
+export default function BlockPage() {
+    return (
         <Container>
             <p>Sua conta está desativada. Por favor, entre em contato com o administrador.</p>
-    
         </Container>
     )
 }
