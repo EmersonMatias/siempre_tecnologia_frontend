@@ -61,6 +61,15 @@ export default function LayoutProductsTable({ screen, setScreen }: LayoutMonitor
                 Opacidade da logo:
                 <input onChange={(event) => Change.LogoOpacity(event, screen, setScreen)} type={"number"} min={0} max={1} value={screen.logo_opacity} />
             </div>
+            <div>
+                Cor da letra promocional:
+                <input onChange={(event) => Change.ColorLetterPromotional(event, screen, setScreen)} type={"color"} />
+            </div>
+            <div>
+                Cor da linha promocional:
+                <input onChange={(event) => Change.ColorPromotionalLine(event, screen, setScreen)} type={"color"} />
+                <button onClick={() => Change.NoColorPromotionalLine(screen, setScreen)}>Sem Cor</button>
+            </div>
         </Container>
     )
 }

@@ -86,7 +86,8 @@ const Container = styled.div<PropsProductsTable>`
                 }
 
                 .promotional{
-                    background-color: aqua;
+                    background-color: ${props => props.screen.color_promotional_line};
+                    color: ${props => props.screen.color_promotional};
 
                     img{
                         height: 160px;

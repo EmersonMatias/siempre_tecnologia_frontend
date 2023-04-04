@@ -68,6 +68,10 @@ function NoColor(screen: Screen, setScreen: React.Dispatch<React.SetStateAction<
     setScreen({ ...screen, color_lines: " " })
 }
 
+function NoColorPromotionalLine(screen: Screen, setScreen: React.Dispatch<React.SetStateAction<Screen>>){
+    setScreen({ ...screen, color_promotional_line: " " })
+}
+
 function Bold(screen: Screen, setScreen: React.Dispatch<React.SetStateAction<Screen>>){
     setScreen({ ...screen, bold: !screen.bold})
 }
@@ -106,6 +110,14 @@ function FontFamilyTitle(e: React.ChangeEvent<HTMLSelectElement> ,screen: Screen
 
 function ColorLetter(e: React.ChangeEvent<HTMLInputElement>, screen: Screen, setScreen: React.Dispatch<React.SetStateAction<Screen>> ){
     setScreen({ ...screen, color: e.target.value })
+}
+
+function ColorLetterPromotional(e: React.ChangeEvent<HTMLInputElement>, screen: Screen, setScreen: React.Dispatch<React.SetStateAction<Screen>> ){
+    setScreen({ ...screen, color_promotional: e.target.value })
+}
+
+function ColorPromotionalLine(e: React.ChangeEvent<HTMLInputElement>, screen: Screen, setScreen: React.Dispatch<React.SetStateAction<Screen>> ){
+    setScreen({ ...screen, color_promotional_line: e.target.value })
 }
 
 function ColorTitle(e: React.ChangeEvent<HTMLInputElement>, screen: Screen, setScreen: React.Dispatch<React.SetStateAction<Screen>> ){
@@ -174,6 +186,9 @@ export const  Change = {
     Italic,
     ProductTime,
     LogoHeight,
-    LogoOpacity
+    LogoOpacity,
+    ColorLetterPromotional,
+    ColorPromotionalLine,
+    NoColorPromotionalLine
 }
 

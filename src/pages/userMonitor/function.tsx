@@ -57,5 +57,7 @@ export const defaultMonitor = {
     italic: false,
     product_time: 3,
     logo_height: 50,
-    logo_opacity: 1
+    logo_opacity: 1,
+    color_promotional_line: "",
+    color_promotional: "#FFFFFF"
 }

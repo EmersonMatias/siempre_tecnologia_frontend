@@ -54,7 +54,9 @@ export type Screen = {
     italic: boolean,
     product_time: number,
     logo_height: number,
-    logo_opacity: number
+    logo_opacity: number,
+    color_promotional_line: string,
+    color_promotional: string
 }
 
 export type ProductScreen = {

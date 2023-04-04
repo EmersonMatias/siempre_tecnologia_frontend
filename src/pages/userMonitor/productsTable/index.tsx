@@ -16,20 +16,19 @@ export default function ProductsTable({ screen, Products }: PropsProductsTable) 
     const screen_id = Number(useParams().id)
     const [promotionalProducts, setPromotionalProducts] = useState<any>([])
     const [logo, setLogo] = useState({ id: 0, url: "" })
-    
-    console.log(screen)
+    const time = screen.product_time
 
     useEffect(() => {
         const interval = setInterval(() => {
             if (end >= Products.length - 1) return setInit(0), setEnd(quantityLines)
             setInit(init + quantityLines)
             setEnd(end + quantityLines)
-
-        }, (screen.product_time*1000))
+            console.log("AA")
+        }, (time * 1000))
 
         return () => clearInterval(interval);
 
-    }, [init, quantityLines])
+    }, [init, quantityLines, Products.length])
 
     useEffect(() => {
         const getPromotionalProducts = async () => {
@@ -43,10 +42,8 @@ export default function ProductsTable({ screen, Products }: PropsProductsTable) 
         }
 
         getPromotionalProducts()
-    
-        getScreenLogo(screen_id, setLogo)
-      
 
+        getScreenLogo(screen_id, setLogo)
     }, [])
 
     return (
