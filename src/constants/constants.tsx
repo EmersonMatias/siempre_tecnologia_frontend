@@ -1,1 +1,1 @@
-export const BASE_URL = "https://siempre-tecnologia-backend-5obk.onrender.com"
+export const BASE_URL = "http://localhost:4000"

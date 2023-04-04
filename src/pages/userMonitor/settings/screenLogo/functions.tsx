@@ -4,7 +4,6 @@ import { BASE_URL } from "../../../../constants/constants";
 const token = localStorage.getItem("token")
 const config = { headers: { Authorization: `Bearer ${token}` } }
 
-
 export async function handleFormSubmitLogo(event: React.FormEvent<HTMLFormElement>, file: File | null, config: object, setDisableButton: React.Dispatch<React.SetStateAction<boolean>>, setFile2: React.Dispatch<React.SetStateAction<File | null>>, setFileName: React.Dispatch<React.SetStateAction<string>>, screen_id: number) {
 
     event.preventDefault();
@@ -12,19 +11,19 @@ export async function handleFormSubmitLogo(event: React.FormEvent<HTMLFormElemen
         const formData = new FormData();
         formData.append('file', file);
         setDisableButton(true)
-   
+
         try {
             const sucess = await axios.post(`${BASE_URL}/screenlogo/${screen_id}`, formData, config)
             setDisableButton(false)
             setFile2(null)
             setFileName("")
             alert("Arquivo enviado com sucesso!")
-        }catch(error){
+        } catch (error) {
             setDisableButton(false)
             setFile2(null)
             alert("Falha ao enviar arquivo!")
         }
-     
+
     }
 }
 
@@ -38,19 +37,35 @@ export function handleFileChangeLogo(event: React.ChangeEvent<HTMLInputElement>,
 export async function getScreenLogo(monitorId: number, setLogo: React.Dispatch<React.SetStateAction<{
     id: number;
     url: string;
-}>>){
+}>>) {
 
-    try{
+    try {
         const sucess = await axios.get(`${BASE_URL}/screenlogo/${monitorId}`, config)
         const logoId: number = sucess.data.id
         const logoUrl: string = sucess.data.url
+        setLogo({ id: logoId, url: logoUrl })
 
-        setLogo({id: logoId , url: logoUrl })
-
-    }catch(error){
+    } catch (error) {
         console.log(error)
     }
-   
 
+
+
+}
+
+export async function deleteScreenLogo(logoId: number, updateScreenLogo: boolean,setUpdateScreenLogo: React.Dispatch<React.SetStateAction<boolean>>) {
+    const confirmDeletion = confirm("Tem certeza que deseja excluir essa logo?")
+
+    if (confirmDeletion) {
+        try {
+            const sucess = await axios.delete(`${BASE_URL}/screenlogo/${logoId}`, config)
+            setUpdateScreenLogo(!updateScreenLogo)
+            alert("Logo excluida com sucesso!")
+        } catch (error) {
+            console.log(error)
+            setUpdateScreenLogo(!updateScreenLogo)
+            alert("Houve um erro ao excluir a logo, tente mais tarde!")
+        }
+    }
 
 }

@@ -31,7 +31,7 @@ export default function ScreenType1() {
     const navigate = useNavigate()
     const isReady = monitorProducts.length !== 0 || screen.id !== 0
 
-
+    console.log(screen, "aaaaaaaaaaaaaaaa")
     useEffect(() => {
         if (active !== "true") {
             navigate("/user")

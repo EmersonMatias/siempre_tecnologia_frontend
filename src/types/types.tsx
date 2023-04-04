@@ -1,5 +1,4 @@
 import { ProductType2 } from "../pages/userMonitor/settings/myProducts"
-import { ProductType } from "../pages/userScreen"
 
 export type UserData = {
     account_type: "user" | "admin",
@@ -52,7 +51,10 @@ export type Screen = {
     color_title: string,
     banner_time: number,
     bold: boolean,
-    italic: boolean
+    italic: boolean,
+    product_time: number,
+    logo_height: number,
+    logo_opacity: number
 }
 
 export type ProductScreen = {

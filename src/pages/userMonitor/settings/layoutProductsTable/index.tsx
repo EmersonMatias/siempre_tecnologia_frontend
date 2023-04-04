@@ -49,7 +49,18 @@ export default function LayoutProductsTable({ screen, setScreen }: LayoutMonitor
                 Cor da letra:
                 <input onChange={(event) => Change.ColorLetter(event, screen, setScreen)} type={"color"} />
             </div>
-
+            <div>
+                Tempo de exibição da tabela de produtos:
+                <input onChange={(event) => Change.ProductTime(event, screen, setScreen)} type={"number"} min={1}  value={screen.product_time} />
+            </div>
+            <div>
+                Tamanho da logo:
+                <input onChange={(event) => Change.LogoHeight(event, screen, setScreen)} type={"number"} min={1} max={100} value={screen.logo_height} />
+            </div>
+            <div>
+                Opacidade da logo:
+                <input onChange={(event) => Change.LogoOpacity(event, screen, setScreen)} type={"number"} min={0} max={1} value={screen.logo_opacity} />
+            </div>
         </Container>
     )
 }

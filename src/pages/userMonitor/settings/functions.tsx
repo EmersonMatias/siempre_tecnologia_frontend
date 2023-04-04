@@ -116,6 +116,20 @@ function BannerTime(e: React.ChangeEvent<HTMLInputElement> ,screen: Screen, setS
     setScreen({ ...screen, banner_time: Number(e.target.value)*1000 })
 }
 
+function LogoHeight(e: React.ChangeEvent<HTMLInputElement> ,screen: Screen, setScreen: React.Dispatch<React.SetStateAction<Screen>>){
+    setScreen({ ...screen, logo_height: Number(e.target.value) })
+}
+
+function LogoOpacity(e: React.ChangeEvent<HTMLInputElement> ,screen: Screen, setScreen: React.Dispatch<React.SetStateAction<Screen>>){
+    setScreen({ ...screen, logo_opacity: Number(e.target.value) })
+}
+
+
+
+function ProductTime(e: React.ChangeEvent<HTMLInputElement> ,screen: Screen, setScreen: React.Dispatch<React.SetStateAction<Screen>>){
+    setScreen({ ...screen, product_time: Number(e.target.value) })
+}
+
 export async function UpdateScreen(screen: Screen){
     const sendContent = async () =>{
 
@@ -157,6 +171,9 @@ export const  Change = {
     ColorTitle,
     BannerTime,
     Bold,
-    Italic
+    Italic,
+    ProductTime,
+    LogoHeight,
+    LogoOpacity
 }
 

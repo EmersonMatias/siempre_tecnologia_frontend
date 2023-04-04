@@ -26,6 +26,7 @@ export async function getMyMonitor(screen_id: number, config: object, setScreen:
     try {
         const sucess = await axios.get(`${BASE_URL}/screen/${screen_id}`, config)
         setScreen(sucess?.data)
+        console.log(sucess.data, "AAAAAAAAAAAAAAAAAAAAAAAAAAAA")
     } catch (error) {
         console.log(error)
     }
@@ -53,5 +54,8 @@ export const defaultMonitor = {
     color_title: "",
     banner_time: 1000,
     bold: false,
-    italic: false
+    italic: false,
+    product_time: 3,
+    logo_height: 50,
+    logo_opacity: 1
 }

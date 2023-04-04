@@ -2,9 +2,9 @@ import styled from "styled-components";
 
 
 const Container = styled.div`
-   width: 100%;
+    width: 100%;
     padding: 2rem;
-    background-color: rgb(0,0,0,0.03);
+    background-color: #dfdfdf;
 
     .sendFile{
         width: 200px;
@@ -43,9 +43,11 @@ const Container = styled.div`
         width: 100%;
         display: flex;
         justify-content: center;
+        background-color: #ffffff;
         
         img{
-            width: 50%;
+            width: 30%;
+            cursor: pointer;
         }
     }
 

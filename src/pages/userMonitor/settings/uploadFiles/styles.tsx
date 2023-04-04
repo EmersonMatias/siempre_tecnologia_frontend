@@ -3,7 +3,7 @@ import styled from "styled-components";
 const Container = styled.div`
     width: 100%;
     padding: 2rem;
-    background-color: rgb(0,0,0,0.03);
+    background-color: #dfdfdf;
 
     .sendFile{
         width: 200px;

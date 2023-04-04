@@ -19,12 +19,12 @@ const Container = styled.div<PropsProductsTable>`
         font-family: ${props => props.screen.font_family};
     
         .imgLogo{
-            height: 50%;
+            height: ${props => props.screen.logo_height}%;
             position: absolute;
             left: 50%;
             top: 50%;
             transform: translate(-50%, -50%);
-            opacity: 1;
+            opacity: ${props => props.screen.logo_opacity};
         }
 
         header{
