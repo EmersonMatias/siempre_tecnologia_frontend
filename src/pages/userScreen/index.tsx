@@ -1,14 +1,11 @@
-import axios from "axios"
 import { useContext, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
-
 import Exit from "../../components/exit"
 import MyContext from "../../context/context"
 import BlockPage from "../Block/BlockPage"
 import { getProducts } from "./functionsUser"
 import { ProductType2 } from "../userMonitor/settings/myProducts"
 import Monitors from "./monitors"
-
 import Container from "./styles"
 
 export type ProductType = {

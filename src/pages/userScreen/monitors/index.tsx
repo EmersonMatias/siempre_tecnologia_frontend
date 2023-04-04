@@ -5,7 +5,7 @@ import { createNewMonitor, deleteMonitor, getMonitors } from "../functionsUser"
 import iconTv from "../../../img/iconTv.svg"
 import iconClose from "../../../img/iconClose.svg"
 import Container from "./styles"
-import MyContext from "../../../context/context"
+import iconLoading from "../../../img/Loading.svg"
 
 type PropsScreen = {
     updatePage: boolean,
@@ -14,12 +14,12 @@ type PropsScreen = {
 
 export default function Monitors({ updatePage, setUpdatePage }: PropsScreen) {
     const navigate = useNavigate()
-
     const [displayForm, setDisplayForm] = useState(false)
     const [screenName, setScreenName] = useState("")
     const [screenType, setScreenType] = useState<"açogue" | "padaria" | "neutro">("neutro")
     const [monitors, setMonitors] = useState<Screen[]>([])
     const [buttonDisabled, setButtoDisabled] = useState(false)
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
         getMonitors(setMonitors)
@@ -28,17 +28,22 @@ export default function Monitors({ updatePage, setUpdatePage }: PropsScreen) {
 
 
     return (
-        <Container displayForm={displayForm} screenType={screenType}>
+        <Container displayForm={displayForm} screenType={screenType} loading={loading}>
             <h1>Telas</h1>
 
             <div className="monitorsContainer">
                 {monitors?.map((monitor) => (
                     <div className="monitor" >
                         <img onClick={() => navigate(`/tela/${monitor.id}`)} src={iconTv} />
-                        <p onDoubleClick={() => deleteMonitor(monitor.id, updatePage, setUpdatePage)}>{monitor.screen_name}</p>
+                        <p onDoubleClick={() => deleteMonitor(monitor.id, updatePage, setUpdatePage, setLoading)}>{monitor.screen_name}</p>
                     </div>
                 ))}
             </div>
+
+            <div  className="loading2">
+                <img src={iconLoading} />
+            </div>
+
 
             <div className="formContainer">
                 <form onSubmit={(event) => createNewMonitor(event, setButtoDisabled, setDisplayForm, setScreenName, screenName, screenType, updatePage, setUpdatePage)}>

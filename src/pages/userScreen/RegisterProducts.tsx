@@ -1,5 +1,6 @@
 import axios from "axios"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { useParams } from "react-router-dom"
 import styled from "styled-components"
 import { ProductType } from "."
 import { BASE_URL } from "../../constants/constants"
@@ -8,16 +9,16 @@ export type TypeFile = "mgv" | "filzola"
 
 
 export default function RegisterProducts() {
+  
     const [filePath, setFilePath] = useState(localStorage.getItem("path"));
     const [typeFile, setTypeFile] = useState<TypeFile>("mgv")
     const [fileContent, setFileContent] = useState("")
-    const productsList: ProductType[] = []
+    const [list, setList] = useState<ProductType[]>([])
     const [disabled, setDisabled] = useState(false)
     const token = localStorage.getItem("token")
     const id = localStorage.getItem("id")
     const config = { headers: { Authorization: `Bearer ${token}` } }
-    console.log(filePath)
-    console.log(config)
+    const monitorId = useParams().id
 
     function handleArquivoSelecionado(event: any) {
         const arquivoSelecionado = event.target.files[0];
@@ -39,7 +40,7 @@ export default function RegisterProducts() {
 
         try {
             setDisabled(true)
-            const sucess = await axios.post(`${BASE_URL}/products`, productsList, config)
+            const sucess = await axios.post(`${BASE_URL}/products/${monitorId}`, list, config)
             setDisabled(false)
             console.log(sucess)
         } catch (error) {
@@ -52,26 +53,41 @@ export default function RegisterProducts() {
         if (typeFile === "filzola") {
             let init = 0
             let end = 39
+            const listaaa = []
             for (let i = 0; i < fileContent.length / 41; i++) {
 
                 const repartindo = fileContent.slice(init, end).replace("\r\n", "")
-                productsList.push({ code: Number(repartindo.slice(0, 6)), type: repartindo[6], product: repartindo.slice(7, 29), price: Number(repartindo.slice(29, 36)), user_id: Number(id) })
+                listaaa.push({ code: Number(repartindo.slice(0, 6)), type: repartindo[6], product: repartindo.slice(7, 29), price: Number(repartindo.slice(29, 36)), user_id: Number(id) })
+    
                 init = end
                 end = end + 41
             }
+            setList(listaaa)
+
         } else if (typeFile === "mgv") {
             let init = 0;
             let end = 146
+            const listaaa= []
             for (let i = 0; i < fileContent.length / 148; i++) {
 
                 const repartindo = fileContent.slice(init, end).replace("\r\n", "")
-                productsList.push({ code: Number(repartindo.slice(3, 9)), type: repartindo[2], product: repartindo.slice(18, 43), price: Number(repartindo.slice(9, 15)), user_id: Number(id) })
+                listaaa.push({ code: Number(repartindo.slice(3, 9)), type: repartindo[2], product: repartindo.slice(18, 43), price: Number(repartindo.slice(9, 15)), user_id: Number(id) })
                 init = end
                 end = end + 148
             }
+            setList(listaaa)
+ 
         }
+
+        
     }
-    chooseTypeFile()
+
+    useEffect(() => {
+        if(fileContent.length){
+            chooseTypeFile()
+        }
+    }, [fileContent])
+    
 
     return (
         <Container typeFile={typeFile}>
@@ -80,7 +96,7 @@ export default function RegisterProducts() {
                     <button className="mgv" onClick={() => typeFile !== "mgv" ? setTypeFile("mgv") : ""}>Itens MGV</button>
                     <button className="filzola" onClick={() => typeFile !== "filzola" ? setTypeFile("filzola") : ""}>FIlzola</button>
                     <form onSubmit={sendProducts}>
-                        <input type="file" accept="text/plain" onChange={(event) => handleArquivoSelecionado(event)} disabled={productsList.length ? true : false} />
+                        <input type="file" accept="text/plain" onChange={(event) => handleArquivoSelecionado(event)} disabled={list.length ? true : false} />
                         <button className="sendProduct" disabled={disabled}>Enviar Produtos</button>
                     </form>
                     <div>Arquivo observado: {filePath}</div>
@@ -97,7 +113,7 @@ export default function RegisterProducts() {
                             </tr>
                         </thead>
                         <tbody>
-                            {productsList.map((product, index) => (
+                            {list.map((product, index) => (
                                 <tr key={index}>
                                     <td>{product.code}</td>
                                     <td>{product.product}</td>
@@ -137,9 +153,17 @@ const Container = styled.div<PropsTypeFile>`
     }
 
     .contentContainer{
-        width: 50%;
+        width: 100%;
         height: 400px;
         overflow-y: scroll;
+
+        table{
+        width: 100%;
+        table-layout: fixed;
+        word-wrap:break-word;
+        text-align: center;
+        color: #000000;
+    }
     }
 
     .filzola, .mgv{
@@ -161,7 +185,6 @@ const Container = styled.div<PropsTypeFile>`
         background-color: ${props => props.typeFile === "mgv" ? "#23cc23" : "#c0bcbf"};
     }
 
-   
 
     .contentContainer::-webkit-scrollbar {
         width: 10px;     
@@ -172,12 +195,7 @@ const Container = styled.div<PropsTypeFile>`
         border-radius: 8px;     
     }
 
-    table{
-        width: 100%;
-        table-layout: fixed;
-        word-wrap:break-word;
-        text-align: center;
-    }
+  
 
     .sendProduct{
         width: 200px;

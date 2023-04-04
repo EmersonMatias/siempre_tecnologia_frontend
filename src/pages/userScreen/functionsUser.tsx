@@ -67,16 +67,19 @@ export async function createNewMonitor(event: React.FormEvent<HTMLFormElement>, 
 
 }
 
-export async function deleteMonitor(id: number, updatePage: boolean, setUpdatePage: React.Dispatch<React.SetStateAction<boolean>>) {
+export async function deleteMonitor(id: number, updatePage: boolean, setUpdatePage: React.Dispatch<React.SetStateAction<boolean>>, setLoading:  React.Dispatch<React.SetStateAction<boolean>>) {
     const confirmMonitorDeletion = confirm("Tem certeza que quer excluir esse monitor?")
+    setLoading(true)
 
     if (confirmMonitorDeletion) {
         try {
             const sucess = await axios.delete(`${BASE_URL}/screen/${id}`, config)
             setUpdatePage(!updatePage)
+            setLoading(false)
             alert("Tela deletada com sucesso!")
         } catch (error) {
             console.log(error)
+            setLoading(false)
         }
     }
 

@@ -2,7 +2,8 @@ import styled from "styled-components"
 
 type ScreensProps = {
     displayForm: boolean,
-    screenType: "açogue" | "padaria" | "neutro"
+    screenType: "açogue" | "padaria" | "neutro",
+    loading: boolean
 }
 
 const Container = styled.div<ScreensProps>`
@@ -20,7 +21,7 @@ const Container = styled.div<ScreensProps>`
     }
 
     .monitorsContainer{
-        display: flex;
+        display: ${props => props.loading === false ? "flex" : "none"};
         flex-wrap: wrap;
         padding: 0 1rem;
     }
@@ -133,6 +134,15 @@ const Container = styled.div<ScreensProps>`
         border: none;
         cursor: pointer;
         margin-top: 2rem;
+    }
+
+
+    .loading2{
+        display: ${props => props.loading === false ? "none" : "flex"};
+        height: 100vh;
+        img{
+            height: 100%;
+        }
     }
 
 `

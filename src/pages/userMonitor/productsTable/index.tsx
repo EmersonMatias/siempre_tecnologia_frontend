@@ -17,6 +17,7 @@ export default function ProductsTable({ screen, Products }: PropsProductsTable) 
     const [promotionalProducts, setPromotionalProducts] = useState<any>([])
     const [logo, setLogo] = useState({ id: 0, url: "" })
     const time = screen.product_time
+    console.log(Products)
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -54,8 +55,8 @@ export default function ProductsTable({ screen, Products }: PropsProductsTable) 
                 <div className="table">
                     <div className="products">
                         {products?.map((e, index) => (
-                            <div className={promotionalProducts.includes(e.id) ? "product promotional" : "product"}>
-                                <p>{e.product}{index}</p>
+                            <div key={e.id} className={promotionalProducts.includes(e.id) ? "product promotional" : "product"}>
+                                <p>{e.product}</p>
                                 {promotionalProducts.includes(e.id) ? <img src={promo2} /> : null}
                                 <p>R$ {(e.price / 100).toFixed(2).replace(".", ",")}</p>
                             </div>))

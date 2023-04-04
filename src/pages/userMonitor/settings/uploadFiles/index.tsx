@@ -14,6 +14,7 @@ export default function UploadFiles({ screen_id }: UploadFiles) {
     const [myFiles, setMyFiles] = useState<FileType[]>([])
     const [disableButton, setDisableButton] = useState(false)
     const [updateSection, setUpdateSection] = useState(false)
+    
 
     useEffect(() => {
         getMonitorFiles(screen_id, config, setMyFiles)
@@ -37,7 +38,7 @@ export default function UploadFiles({ screen_id }: UploadFiles) {
             <div className="files">
                 {myFiles?.map((file, index) => (
                     file.file_name.includes("mp4") ?
-                        <video controls onClick={() => deleteFile(file.id, config, updateSection, setUpdateSection)}>
+                        <video key={index} controls onClick={() => deleteFile(file.id, config, updateSection, setUpdateSection)}>
                             <source src={file.url} type="video/mp4" ></source>
                         </video>
                         :

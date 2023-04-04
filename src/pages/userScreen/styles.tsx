@@ -7,6 +7,8 @@ const Container = styled.div`
     overflow-wrap: break-word;
     overflow-x: hidden;
     font-family: 'Roboto', sans-serif;
+    display: flex;
+    flex-direction: column;
 
     header{
         position: relative;
@@ -19,6 +21,7 @@ const Container = styled.div`
         font-weight: 600;
         background-color: red;
     }
+    
 `
 
 export default Container
